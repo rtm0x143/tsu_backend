@@ -12,7 +12,7 @@ public enum Gender : byte
 public class User
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     [Required]
     [MaxLength(64)]

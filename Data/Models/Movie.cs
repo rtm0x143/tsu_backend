@@ -6,7 +6,7 @@ namespace MovieCatalogBackend.Data.Models;
 public class Movie
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     [MaxLength(256)]
     public string Name { get; set; }

@@ -7,12 +7,12 @@ public class Review
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
-
+    
     [Required]
     public int MovieId { get; set; }
 
-    [ForeignKey("MovieId")]
-    public virtual Movie Movie { get; set; }
+    [Required]
+    public int UserId { get; set; }
 
     [Required]
     public string ReviewText { get; set; }

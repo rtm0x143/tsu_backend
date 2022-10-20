@@ -14,9 +14,15 @@ public class User
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
-    public string? Name { get; set; }
+    [Required]
+    [MaxLength(64)]
+    public string Username { get; set; }
 
-    public DateOnly BirthDate { get; set; }
+    [Required]
+    [MaxLength(64)]
+    public string Name { get; set; }
+
+    public DateOnly? BirthDate { get; set; }
 
     [Required(AllowEmptyStrings = false)]
     [DataType(DataType.EmailAddress)]
@@ -28,10 +34,8 @@ public class User
 
     public bool IsAdmin { get; set; } = false;
 
-    public Gender Gender { get; set; }
+    public Gender? Gender { get; set; }
 
-    [DataType(DataType.Url)]
+    [DataType(DataType.ImageUrl)]
     public string? Avatar { get; set; }
-
-    public List<Review> Reviews { get; set; }
 }

@@ -11,7 +11,7 @@ public class Movie
     [MaxLength(256)]
     public string Name { get; set; }
 
-    [DataType(DataType.Url)]
+    [DataType(DataType.ImageUrl)]
     public string Poster { get; set; }
 
     public string Description { get; set; }

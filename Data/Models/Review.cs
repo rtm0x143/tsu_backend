@@ -8,11 +8,9 @@ public class Review
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
     
-    [Required]
-    public Guid MovieId { get; set; }
+    public Movie TargetMovie { get; set; }
 
-    [Required]
-    public Guid UserId { get; set; }
+    public User Creator { get; set; }
 
     public string ReviewText { get; set; } = string.Empty;
 

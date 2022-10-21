@@ -32,5 +32,9 @@ public class Movie
 
     public short AgeLimit { get; set; }
 
-    public List<Genre> Genres { get; set; }
+    public ICollection<Genre> Genres { get; set; }
+
+    public ICollection<Review> Reviews { get; set; }
+
+    public ICollection<User> UsersFavored { get; set; }
 }

@@ -38,4 +38,8 @@ public class User
 
     [DataType(DataType.ImageUrl)]
     public string? Avatar { get; set; }
+
+    public ICollection<Review> Reviews { get; set; }
+
+    public ICollection<Movie> Favorites { get; set; }
 }

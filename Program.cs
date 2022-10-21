@@ -1,8 +1,17 @@
+using MovieCatalogBackend.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer()
-    .AddSwaggerGen();
+    .AddSwaggerGen()
+    .AddDbContext<MovieCatalogContext>(optionsBuilder =>
+    {
+        optionsBuilder.UseOracle(builder.Configuration.GetConnectionString("DefaultConnection"));
+    });
+        
 
 var app = builder.Build();
 

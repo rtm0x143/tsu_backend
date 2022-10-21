@@ -3,16 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer()
     .AddSwaggerGen()
-    .AddDbContext<MovieCatalogContext>(optionsBuilder =>
-    {
-        optionsBuilder.UseOracle(builder.Configuration.GetConnectionString("DefaultConnection"));
-    });
+    .AddDbContext<MovieCatalogContext>(MovieCatalogContext.BuildOptions);
         
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

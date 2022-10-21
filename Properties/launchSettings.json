@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
@@ -11,13 +11,15 @@
   "profiles": {
     "MovieCatalogBackend": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7128;http://localhost:5128",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "MOVIE_CATALOG_CONN": "User Id=C##MovieCatalog;Password=mcdevpass;Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=orcl)))"
+      },
+      "hotReloadEnabled": false,
+      "applicationUrl": "https://localhost:7128;http://localhost:5128",
+      "dotnetRunMessages": true
     },
     "IIS Express": {
       "commandName": "IISExpress",

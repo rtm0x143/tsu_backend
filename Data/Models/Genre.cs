@@ -7,7 +7,10 @@ public class Genre
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
+
     [Required]
     [MaxLength(255)]
     public string Name { get; set; }
+
+    public ICollection<Movie> Movies { get; set;}
 }

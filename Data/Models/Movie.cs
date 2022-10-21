@@ -12,23 +12,23 @@ public class Movie
     public string Name { get; set; }
 
     [DataType(DataType.ImageUrl)]
-    public string Poster { get; set; }
+    public string? Poster { get; set; }
 
-    public string Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
     public short Year { get; set; }
 
-    public string Country { get; set; }
+    public string? Country { get; set; }
 
     public int Time { get; set; }
 
-    public string TagLine { get; set; }
+    public string? TagLine { get; set; }
 
-    public string Director { get; set; }
+    public string? Director { get; set; }
 
-    public int Bubget { get; set; }
+    public int? Bubget { get; set; }
 
-    public int Fees { get; set; }
+    public int? Fees { get; set; }
 
     public short AgeLimit { get; set; }
 

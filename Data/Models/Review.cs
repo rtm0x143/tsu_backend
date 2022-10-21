@@ -14,9 +14,9 @@ public class Review
     [Required]
     public Guid UserId { get; set; }
 
-    [Required]
-    public string ReviewText { get; set; }
+    public string ReviewText { get; set; } = string.Empty;
 
+    [Required]
     public int Rating { get; set; }
 
     public bool IsAnonymous { get; set; } = false;

@@ -10,7 +10,7 @@ namespace MovieCatalogBackend.Data.Models;
 public class FavoriteMovie
 {
     [Required]
-    public Guid UsetId { get; set; }
+    public Guid UserId { get; set; }
     [Required]
     public Movie Movie { get; set; }
 }

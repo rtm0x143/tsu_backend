@@ -22,7 +22,7 @@ public class User
     [MaxLength(64)]
     public string Name { get; set; }
 
-    public DateOnly? BirthDate { get; set; }
+    public DateTime? BirthDate { get; set; }
 
     [Required(AllowEmptyStrings = false)]
     [DataType(DataType.EmailAddress)]

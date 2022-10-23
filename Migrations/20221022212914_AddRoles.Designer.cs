@@ -12,8 +12,8 @@ using Oracle.EntityFrameworkCore.Metadata;
 namespace MovieCatalogBackend.Migrations
 {
     [DbContext(typeof(MovieCatalogContext))]
-    [Migration("20221021111915_Initial")]
-    partial class Initial
+    [Migration("20221022212914_AddRoles")]
+    partial class AddRoles
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -167,6 +167,9 @@ namespace MovieCatalogBackend.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("NVARCHAR2(2000)");
+
+                    b.Property<byte>("Role")
+                        .HasColumnType("NUMBER(3)");
 
                     b.Property<string>("Username")
                         .IsRequired()

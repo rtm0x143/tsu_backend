@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MovieCatalogBackend.Data.Models;
+namespace MovieCatalogBackend.Data.MovieCatalog;
 
 public enum Gender : byte
 {
@@ -9,10 +9,20 @@ public enum Gender : byte
     Male
 }
 
+public enum UserRole : byte
+{
+    User,
+    Admin
+}
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
 public class User
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
+
+    public UserRole Role { get; set; } = UserRole.User;
 
     [Required]
     [MaxLength(64)]
@@ -43,3 +53,5 @@ public class User
 
     public ICollection<Movie> Favorites { get; set; }
 }
+
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.

@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MovieCatalogBackend.Data.Models;
+namespace MovieCatalogBackend.Data.MovieCatalog;
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 public class Movie
 {
@@ -38,3 +40,5 @@ public class Movie
 
     public ICollection<User> UsersFavored { get; set; }
 }
+
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.

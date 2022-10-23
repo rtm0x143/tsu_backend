@@ -3,7 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MovieCatalogBackend.Data;
+using MovieCatalogBackend.Data.MovieCatalog;
 using Oracle.EntityFrameworkCore.Metadata;
 
 #nullable disable
@@ -37,7 +37,7 @@ namespace MovieCatalogBackend.Migrations
                     b.ToTable("GenreMovie");
                 });
 
-            modelBuilder.Entity("MovieCatalogBackend.Data.Models.Genre", b =>
+            modelBuilder.Entity("MovieCatalogBackend.Data.MovieCatalog.Genre", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,7 +53,7 @@ namespace MovieCatalogBackend.Migrations
                     b.ToTable("Genre");
                 });
 
-            modelBuilder.Entity("MovieCatalogBackend.Data.Models.Movie", b =>
+            modelBuilder.Entity("MovieCatalogBackend.Data.MovieCatalog.Movie", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -100,7 +100,7 @@ namespace MovieCatalogBackend.Migrations
                     b.ToTable("Movie");
                 });
 
-            modelBuilder.Entity("MovieCatalogBackend.Data.Models.Review", b =>
+            modelBuilder.Entity("MovieCatalogBackend.Data.MovieCatalog.Review", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -135,7 +135,7 @@ namespace MovieCatalogBackend.Migrations
                     b.ToTable("Review");
                 });
 
-            modelBuilder.Entity("MovieCatalogBackend.Data.Models.User", b =>
+            modelBuilder.Entity("MovieCatalogBackend.Data.MovieCatalog.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -166,6 +166,9 @@ namespace MovieCatalogBackend.Migrations
                         .IsRequired()
                         .HasColumnType("NVARCHAR2(2000)");
 
+                    b.Property<byte>("Role")
+                        .HasColumnType("NUMBER(3)");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(64)
@@ -193,28 +196,28 @@ namespace MovieCatalogBackend.Migrations
 
             modelBuilder.Entity("GenreMovie", b =>
                 {
-                    b.HasOne("MovieCatalogBackend.Data.Models.Genre", null)
+                    b.HasOne("MovieCatalogBackend.Data.MovieCatalog.Genre", null)
                         .WithMany()
                         .HasForeignKey("GenresId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MovieCatalogBackend.Data.Models.Movie", null)
+                    b.HasOne("MovieCatalogBackend.Data.MovieCatalog.Movie", null)
                         .WithMany()
                         .HasForeignKey("MoviesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MovieCatalogBackend.Data.Models.Review", b =>
+            modelBuilder.Entity("MovieCatalogBackend.Data.MovieCatalog.Review", b =>
                 {
-                    b.HasOne("MovieCatalogBackend.Data.Models.User", "Creator")
+                    b.HasOne("MovieCatalogBackend.Data.MovieCatalog.User", "Creator")
                         .WithMany("Reviews")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MovieCatalogBackend.Data.Models.Movie", "TargetMovie")
+                    b.HasOne("MovieCatalogBackend.Data.MovieCatalog.Movie", "TargetMovie")
                         .WithMany("Reviews")
                         .HasForeignKey("TargetMovieId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -227,25 +230,25 @@ namespace MovieCatalogBackend.Migrations
 
             modelBuilder.Entity("MovieUser", b =>
                 {
-                    b.HasOne("MovieCatalogBackend.Data.Models.Movie", null)
+                    b.HasOne("MovieCatalogBackend.Data.MovieCatalog.Movie", null)
                         .WithMany()
                         .HasForeignKey("FavoritesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MovieCatalogBackend.Data.Models.User", null)
+                    b.HasOne("MovieCatalogBackend.Data.MovieCatalog.User", null)
                         .WithMany()
                         .HasForeignKey("UsersFavoredId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MovieCatalogBackend.Data.Models.Movie", b =>
+            modelBuilder.Entity("MovieCatalogBackend.Data.MovieCatalog.Movie", b =>
                 {
                     b.Navigation("Reviews");
                 });
 
-            modelBuilder.Entity("MovieCatalogBackend.Data.Models.User", b =>
+            modelBuilder.Entity("MovieCatalogBackend.Data.MovieCatalog.User", b =>
                 {
                     b.Navigation("Reviews");
                 });

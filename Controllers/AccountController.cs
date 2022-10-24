@@ -33,10 +33,7 @@ public class AccountController : ControllerBase
                 .FirstOrDefault(user => user.Username == regUser.userName || user.Email == regUser.email);
 
             if (collision != null)
-            {
-                if (collision.Email == regUser.email) return Conflict("Email already used");
-                return Conflict("Username already used");
-            }
+                return Conflict(collision.Email == regUser.email ? "Email already used" : "Username already used");
 
             _context.User.Add(regUser);
             await _context.SaveChangesAsync();
@@ -44,7 +41,7 @@ public class AccountController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Occured while regestretion user : {user}", regUser);
+            _logger.LogError(ex, "Occured while registration user : {user}", regUser);
             return StatusCode(500);
         }
     }

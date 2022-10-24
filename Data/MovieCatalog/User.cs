@@ -30,6 +30,7 @@ public static class UserPrivilege
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 [Index("Username", IsUnique = true)]
+[Index("Email", IsUnique = true)]
 public class User
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -37,7 +38,7 @@ public class User
 
     public UserRole Role { get; set; } = UserRole.User;
 
-    [Required]
+    [Required(AllowEmptyStrings = false)]
     [MaxLength(64)]
     public string Username { get; set; }
 
@@ -47,10 +48,11 @@ public class User
 
     public DateTime? BirthDate { get; set; }
 
+    [MaxLength(64)]
     [Required(AllowEmptyStrings = false)]
     [DataType(DataType.EmailAddress)]
     public string Email { get; set; }
-
+    
     [Required(AllowEmptyStrings = false)]
     [DataType(DataType.Password)]
     public string Password { get; set; }

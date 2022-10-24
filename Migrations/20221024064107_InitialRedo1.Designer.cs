@@ -12,8 +12,8 @@ using Oracle.EntityFrameworkCore.Metadata;
 namespace MovieCatalogBackend.Migrations
 {
     [DbContext(typeof(MovieCatalogContext))]
-    [Migration("20221022212914_AddRoles")]
-    partial class AddRoles
+    [Migration("20221024064107_InitialRedo1")]
+    partial class InitialRedo1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -156,9 +156,6 @@ namespace MovieCatalogBackend.Migrations
                     b.Property<byte?>("Gender")
                         .HasColumnType("NUMBER(3)");
 
-                    b.Property<bool>("IsAdmin")
-                        .HasColumnType("NUMBER(1)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
@@ -177,6 +174,9 @@ namespace MovieCatalogBackend.Migrations
                         .HasColumnType("NVARCHAR2(64)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("User");
                 });

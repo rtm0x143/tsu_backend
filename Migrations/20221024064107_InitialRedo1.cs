@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MovieCatalogBackend.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialRedo1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -48,12 +48,12 @@ namespace MovieCatalogBackend.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "RAW(16)", nullable: false),
+                    Role = table.Column<byte>(type: "NUMBER(3)", nullable: false),
                     Username = table.Column<string>(type: "NVARCHAR2(64)", maxLength: 64, nullable: false),
                     Name = table.Column<string>(type: "NVARCHAR2(64)", maxLength: 64, nullable: false),
                     BirthDate = table.Column<DateTime>(type: "TIMESTAMP(7)", nullable: true),
                     Email = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
                     Password = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
-                    IsAdmin = table.Column<bool>(type: "NUMBER(1)", nullable: false),
                     Gender = table.Column<byte>(type: "NUMBER(3)", nullable: true),
                     Avatar = table.Column<string>(type: "NVARCHAR2(2000)", nullable: true)
                 },
@@ -158,6 +158,12 @@ namespace MovieCatalogBackend.Migrations
                 name: "IX_Review_TargetMovieId",
                 table: "Review",
                 column: "TargetMovieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_Username",
+                table: "User",
+                column: "Username",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

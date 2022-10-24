@@ -15,7 +15,8 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "MOVIE_CATALOG_CONN": "User Id=C##MovieCatalog;Password=mcdevpass;Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=orcl)))"
+        "MOVIE_CATALOG_CONN": "User Id=C##MovieCatalog;Password=mcdevpass;Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=orcl)))",
+        "TOKEN_LIST_CONN": "User Id=C##TokenList;Password=tldevpass;Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=orcl)))"
       },
       "hotReloadEnabled": false,
       "applicationUrl": "https://localhost:7128;http://localhost:5128",

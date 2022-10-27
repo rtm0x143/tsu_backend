@@ -23,7 +23,14 @@ public class MovieDetailsModel : MovieElementModel
         name = movie.Name,
         poster = movie.Poster,
         reviews = movie.Reviews?.Select(r => (ReviewModel)r).ToArray() ?? Array.Empty<ReviewModel>(),
-        year = movie.Year
+        year = movie.Year,
+        budget = movie.Fees,
+        description = movie.Description,
+        director = movie.Director,
+        fees = movie.Fees,
+        time = movie.Time,
+        ageLimit = movie.AgeLimit,
+        tagLine = movie.TagLine
     };
 
     public static explicit operator Movie(MovieDetailsModel movieDetails) => new()

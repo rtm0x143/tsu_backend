@@ -30,7 +30,6 @@ public class MovieCatalogContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         BuildOptions(ConfigurationHelper.BaseConfiguration, optionsBuilder);
-        optionsBuilder.EnableSensitiveDataLogging();
         base.OnConfiguring(optionsBuilder);
     }
 }

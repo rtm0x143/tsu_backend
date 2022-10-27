@@ -5,11 +5,15 @@ using MovieCatalogBackend.Data.Tokens;
 using MovieCatalogBackend.Helpers;
 using MovieCatalogBackend.Services;
 using MovieCatalogBackend.Services.Authentication;
+using MovieCatalogBackend.Services.MovieServices;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationHelper.BaseConfiguration = builder.Configuration;
 
-builder.Services.AddControllers();
+builder.Services
+    .AddEndpointsApiExplorer()
+    .AddSwaggerGen()
+    .AddControllers();
 
 var authenticationOptions = new AuthenticationOptions(builder.Configuration);
 var serverUrls = builder.WebHost.GetSetting(WebHostDefaults.ServerUrlsKey)?.Split(";").ToHashSet();
@@ -19,25 +23,40 @@ if (serverUrls != null)
     authenticationOptions.Audiences.UnionWith(serverUrls);
 }
 
+// Authentication
 builder.Services
     .AddSingleton(authenticationOptions) 
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => 
         options.TokenValidationParameters = authenticationOptions.CreateValidationParameters());
 
+// Authorization
 builder.Services
     .AddScoped<ITokenService, TokenService>()
     .AddSingleton<TokenListCleanerDemon>()
     .AddScoped<IAuthorizationHandler, TokenNotBlackedAuthorizationHandler>()
     .AddAuthorization(options =>
-        options.AddPolicy("TokenNotBlacked", policyBuilder => policyBuilder.AddRequirements(TokenNotBlackedRequirements.Istance))
+        options.AddPolicy("TokenNotBlacked", 
+            policyBuilder => policyBuilder.AddRequirements(TokenNotBlackedRequirements.Istance))
     );
 
-builder.Services.AddEndpointsApiExplorer()
-    .AddSwaggerGen()
-    .AddDbContext<MovieCatalogContext>(MovieCatalogContext.BuildOptions)
-    .AddDbContext<TokenListContext>(TokenListContext.BuildOptions);
-        
+// DB contexts
+builder.Services
+    .AddDbContext<MovieCatalogContext>(opBuilder =>
+    {
+        opBuilder.EnableSensitiveDataLogging(builder.Environment.IsDevelopment());
+        MovieCatalogContext.BuildOptions(builder.Configuration, opBuilder);
+    })
+    .AddDbContext<TokenListContext>(opBuilder =>
+    {
+        opBuilder.EnableSensitiveDataLogging(builder.Environment.IsDevelopment());
+        TokenListContext.BuildOptions(builder.Configuration, opBuilder);
+    });
+
+// Other services
+builder.Services
+    .AddScoped<IMovieSelector, MovieSelectService>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

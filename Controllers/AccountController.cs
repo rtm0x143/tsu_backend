@@ -12,9 +12,9 @@ namespace MovieCatalogBackend.Controllers;
 [Route("api/account")]
 public class AccountController : ControllerBase
 {
-    readonly ITokenService _tokenService;
-    readonly MovieCatalogContext _context;
-    readonly ILogger _logger;
+    private readonly ITokenService _tokenService;
+    private readonly MovieCatalogContext _context;
+    private  readonly ILogger _logger;
 
     public AccountController(MovieCatalogContext context, ITokenService tokenService, ILogger<AccountController> logger)
     {
@@ -26,7 +26,6 @@ public class AccountController : ControllerBase
     [HttpPost("register")]
     public async Task<ActionResult> Register(UserRegisterModel regUser) 
     {
-        if (!ModelState.IsValid) return ValidationProblem(ModelState);
         try
         {
             var collision = _context.User
@@ -35,7 +34,7 @@ public class AccountController : ControllerBase
             if (collision != null)
                 return Conflict(collision.Email == regUser.email ? "Email already used" : "Username already used");
 
-            _context.User.Add(regUser);
+            _context.User.Add((User)regUser);
             await _context.SaveChangesAsync();
             return Ok();
         }
@@ -49,8 +48,6 @@ public class AccountController : ControllerBase
     [HttpPost("login")]
     public ActionResult<TokenDto> Login(LoginCredentials credentials)
     {
-        if (!ModelState.IsValid) return ValidationProblem(ModelState);
-
         try
         {
             var user = _context.User

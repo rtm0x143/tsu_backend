@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MovieCatalogBackend.Migrations
 {
-    public partial class InitialRedo2 : Migration
+    public partial class InitialRedo3 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -87,24 +87,24 @@ namespace MovieCatalogBackend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MovieUser",
+                name: "FavoriteMovie",
                 columns: table => new
                 {
-                    FavoritesId = table.Column<Guid>(type: "RAW(16)", nullable: false),
-                    UsersFavoredId = table.Column<Guid>(type: "RAW(16)", nullable: false)
+                    MovieId = table.Column<Guid>(type: "RAW(16)", nullable: false),
+                    UserId = table.Column<Guid>(type: "RAW(16)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MovieUser", x => new { x.FavoritesId, x.UsersFavoredId });
+                    table.PrimaryKey("PK_FavoriteMovie", x => new { x.MovieId, x.UserId });
                     table.ForeignKey(
-                        name: "FK_MovieUser_Movie_FavoritesId",
-                        column: x => x.FavoritesId,
+                        name: "FK_FavoriteMovie_Movie_MovieId",
+                        column: x => x.MovieId,
                         principalTable: "Movie",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MovieUser_User_UsersFavoredId",
-                        column: x => x.UsersFavoredId,
+                        name: "FK_FavoriteMovie_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -140,14 +140,14 @@ namespace MovieCatalogBackend.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_FavoriteMovie_UserId",
+                table: "FavoriteMovie",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GenreMovie_MoviesId",
                 table: "GenreMovie",
                 column: "MoviesId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MovieUser_UsersFavoredId",
-                table: "MovieUser",
-                column: "UsersFavoredId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Review_CreatorId",
@@ -175,10 +175,10 @@ namespace MovieCatalogBackend.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "GenreMovie");
+                name: "FavoriteMovie");
 
             migrationBuilder.DropTable(
-                name: "MovieUser");
+                name: "GenreMovie");
 
             migrationBuilder.DropTable(
                 name: "Review");

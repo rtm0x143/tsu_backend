@@ -9,6 +9,7 @@ public class MovieCatalogContext : DbContext
     public DbSet<Movie> Movie { get; set; }
     public DbSet<Review> Review { get; set; }
     public DbSet<Genre> Genre { get; set; }
+    public DbSet<FavoriteMovie> FavoriteMovie { get; set; }
 
     public MovieCatalogContext(DbContextOptions<MovieCatalogContext> options) : base(options) { }
     public MovieCatalogContext() { }
@@ -31,5 +32,17 @@ public class MovieCatalogContext : DbContext
     {
         BuildOptions(ConfigurationHelper.BaseConfiguration, optionsBuilder);
         base.OnConfiguring(optionsBuilder);
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<FavoriteMovie>().HasKey("MovieId", "UserId");
+
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.Favorites)
+            .WithMany(m => m.UsersFavored)
+            .UsingEntity<FavoriteMovie>();
+        
+        base.OnModelCreating(modelBuilder);
     }
 }

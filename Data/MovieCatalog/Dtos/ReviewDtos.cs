@@ -28,6 +28,6 @@ public class ReviewModel : ReviewShortModel
     {
         Id = id, TargetMovieId = movieId, CreatorId = author.userId, Rating = rating,
         ReviewText = reviewText ?? string.Empty, IsAnonymous = isAnonymous,
-        CreateDateTime = createDateTime ?? DateTime.UtcNow
+        CreateDateTime = createDateTime
     };
 }

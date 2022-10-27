@@ -37,6 +37,21 @@ namespace MovieCatalogBackend.Migrations
                     b.ToTable("GenreMovie");
                 });
 
+            modelBuilder.Entity("MovieCatalogBackend.Data.MovieCatalog.FavoriteMovie", b =>
+                {
+                    b.Property<Guid>("MovieId")
+                        .HasColumnType("RAW(16)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("RAW(16)");
+
+                    b.HasKey("MovieId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("FavoriteMovie");
+                });
+
             modelBuilder.Entity("MovieCatalogBackend.Data.MovieCatalog.Genre", b =>
                 {
                     b.Property<Guid>("Id")
@@ -183,21 +198,6 @@ namespace MovieCatalogBackend.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("MovieUser", b =>
-                {
-                    b.Property<Guid>("FavoritesId")
-                        .HasColumnType("RAW(16)");
-
-                    b.Property<Guid>("UsersFavoredId")
-                        .HasColumnType("RAW(16)");
-
-                    b.HasKey("FavoritesId", "UsersFavoredId");
-
-                    b.HasIndex("UsersFavoredId");
-
-                    b.ToTable("MovieUser");
-                });
-
             modelBuilder.Entity("GenreMovie", b =>
                 {
                     b.HasOne("MovieCatalogBackend.Data.MovieCatalog.Genre", null)
@@ -211,6 +211,25 @@ namespace MovieCatalogBackend.Migrations
                         .HasForeignKey("MoviesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("MovieCatalogBackend.Data.MovieCatalog.FavoriteMovie", b =>
+                {
+                    b.HasOne("MovieCatalogBackend.Data.MovieCatalog.Movie", "Movie")
+                        .WithMany()
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MovieCatalogBackend.Data.MovieCatalog.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MovieCatalogBackend.Data.MovieCatalog.Review", b =>
@@ -230,21 +249,6 @@ namespace MovieCatalogBackend.Migrations
                     b.Navigation("Creator");
 
                     b.Navigation("TargetMovie");
-                });
-
-            modelBuilder.Entity("MovieUser", b =>
-                {
-                    b.HasOne("MovieCatalogBackend.Data.MovieCatalog.Movie", null)
-                        .WithMany()
-                        .HasForeignKey("FavoritesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MovieCatalogBackend.Data.MovieCatalog.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersFavoredId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("MovieCatalogBackend.Data.MovieCatalog.Movie", b =>

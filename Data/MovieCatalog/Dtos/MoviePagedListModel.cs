@@ -9,8 +9,12 @@ public class PageInfoModel
     public int currentPage { get; set; }
 }
 
-public class MoviePagedListModel
+public class MoviesListModel
 {
     [Required] public MovieElementModel[] movies { get; set; }
+}
+
+public class MoviePagedListModel : MoviesListModel
+{
     [Required] public PageInfoModel pageInfo { get; set; }
 }

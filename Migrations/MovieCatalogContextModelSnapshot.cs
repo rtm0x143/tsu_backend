@@ -17,7 +17,7 @@ namespace MovieCatalogBackend.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.10")
+                .HasAnnotation("ProductVersion", "6.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             OracleModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -62,7 +62,7 @@ namespace MovieCatalogBackend.Migrations
                     b.Property<short>("AgeLimit")
                         .HasColumnType("NUMBER(5)");
 
-                    b.Property<int?>("Bubget")
+                    b.Property<int?>("Budget")
                         .HasColumnType("NUMBER(10)");
 
                     b.Property<string>("Country")
@@ -78,12 +78,12 @@ namespace MovieCatalogBackend.Migrations
                         .HasColumnType("NUMBER(10)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("NVARCHAR2(256)");
 
                     b.Property<string>("Poster")
-                        .HasColumnType("NVARCHAR2(2000)");
+                        .HasMaxLength(8000)
+                        .HasColumnType("NCLOB");
 
                     b.Property<string>("TagLine")
                         .HasColumnType("NVARCHAR2(2000)");
@@ -105,7 +105,7 @@ namespace MovieCatalogBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("RAW(16)");
 
-                    b.Property<DateTime>("CreateDateTime")
+                    b.Property<DateTime?>("CreateDateTime")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("TIMESTAMP(7)");
 
@@ -141,7 +141,8 @@ namespace MovieCatalogBackend.Migrations
                         .HasColumnType("RAW(16)");
 
                     b.Property<string>("Avatar")
-                        .HasColumnType("NVARCHAR2(2000)");
+                        .HasMaxLength(8000)
+                        .HasColumnType("NCLOB");
 
                     b.Property<DateTime?>("BirthDate")
                         .HasColumnType("TIMESTAMP(7)");

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MovieCatalogBackend.Migrations
 {
-    public partial class InitialRedo1 : Migration
+    public partial class InitialRedo2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,15 +26,15 @@ namespace MovieCatalogBackend.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "RAW(16)", nullable: false),
-                    Name = table.Column<string>(type: "NVARCHAR2(256)", maxLength: 256, nullable: false),
-                    Poster = table.Column<string>(type: "NVARCHAR2(2000)", nullable: true),
-                    Description = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
+                    Name = table.Column<string>(type: "NVARCHAR2(256)", maxLength: 256, nullable: true),
+                    Poster = table.Column<string>(type: "NCLOB", maxLength: 8000, nullable: true),
+                    Description = table.Column<string>(type: "NVARCHAR2(2000)", nullable: true),
                     Year = table.Column<short>(type: "NUMBER(5)", nullable: false),
                     Country = table.Column<string>(type: "NVARCHAR2(2000)", nullable: true),
                     Time = table.Column<int>(type: "NUMBER(10)", nullable: false),
                     TagLine = table.Column<string>(type: "NVARCHAR2(2000)", nullable: true),
                     Director = table.Column<string>(type: "NVARCHAR2(2000)", nullable: true),
-                    Bubget = table.Column<int>(type: "NUMBER(10)", nullable: true),
+                    Budget = table.Column<int>(type: "NUMBER(10)", nullable: true),
                     Fees = table.Column<int>(type: "NUMBER(10)", nullable: true),
                     AgeLimit = table.Column<short>(type: "NUMBER(5)", nullable: false)
                 },
@@ -52,10 +52,10 @@ namespace MovieCatalogBackend.Migrations
                     Username = table.Column<string>(type: "NVARCHAR2(64)", maxLength: 64, nullable: false),
                     Name = table.Column<string>(type: "NVARCHAR2(64)", maxLength: 64, nullable: false),
                     BirthDate = table.Column<DateTime>(type: "TIMESTAMP(7)", nullable: true),
-                    Email = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
+                    Email = table.Column<string>(type: "NVARCHAR2(64)", maxLength: 64, nullable: false),
                     Password = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
                     Gender = table.Column<byte>(type: "NUMBER(3)", nullable: true),
-                    Avatar = table.Column<string>(type: "NVARCHAR2(2000)", nullable: true)
+                    Avatar = table.Column<string>(type: "NCLOB", maxLength: 8000, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -120,7 +120,7 @@ namespace MovieCatalogBackend.Migrations
                     ReviewText = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
                     Rating = table.Column<int>(type: "NUMBER(10)", nullable: false),
                     IsAnonymous = table.Column<bool>(type: "NUMBER(1)", nullable: false),
-                    CreateDateTime = table.Column<DateTime>(type: "TIMESTAMP(7)", nullable: false)
+                    CreateDateTime = table.Column<DateTime>(type: "TIMESTAMP(7)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -158,6 +158,12 @@ namespace MovieCatalogBackend.Migrations
                 name: "IX_Review_TargetMovieId",
                 table: "Review",
                 column: "TargetMovieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_Email",
+                table: "User",
+                column: "Email",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_Username",

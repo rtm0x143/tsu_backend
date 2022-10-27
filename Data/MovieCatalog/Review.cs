@@ -5,13 +5,17 @@ namespace MovieCatalogBackend.Data.MovieCatalog;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-public class Review
+public class Review : IHasGuid
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
     
+    public Guid TargetMovieId  { get; set; }
+    [ForeignKey("TargetMovieId")]
     public Movie TargetMovie { get; set; }
 
+    public Guid CreatorId { get; set; }
+    [ForeignKey("CreatorId")]
     public User Creator { get; set; }
 
     public string ReviewText { get; set; } = string.Empty;
@@ -23,7 +27,7 @@ public class Review
 
     [DataType(DataType.Date)]
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-    public DateTime CreateDateTime { get; set; }
+    public DateTime? CreateDateTime { get; set; } 
 }
 
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.

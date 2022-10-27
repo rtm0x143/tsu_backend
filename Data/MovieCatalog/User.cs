@@ -31,7 +31,7 @@ public static class UserPrivilege
 
 [Index("Username", IsUnique = true)]
 [Index("Email", IsUnique = true)]
-public class User
+public class User : IHasGuid
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
@@ -71,11 +71,12 @@ public class User
     public Gender? Gender { get; set; }
 
     [DataType(DataType.ImageUrl)]
+    [MaxLength(8000)]
     public string? Avatar { get; set; }
 
-    public ICollection<Review> Reviews { get; set; }
+    public ICollection<Review>? Reviews { get; set; }
 
-    public ICollection<Movie> Favorites { get; set; }
+    public ICollection<Movie>? Favorites { get; set; }
 }
 
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.

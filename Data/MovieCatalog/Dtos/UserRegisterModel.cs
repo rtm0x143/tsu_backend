@@ -2,15 +2,6 @@
 
 namespace MovieCatalogBackend.Data.MovieCatalog.Dtos;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
-public class LoginCredentials
-{
-    [Required] public string username { get; set; }
-    [Required] public string password { get; set; }
-}
-
-/*different/wierd variables naming is required by api reference*/
 public class UserRegisterModel
 {
     [Required] public string userName { get; set; }
@@ -26,7 +17,7 @@ public class UserRegisterModel
 
     public Gender? gender { get; set; }
 
-    public static implicit operator User(UserRegisterModel regUser) => new()
+    public static explicit operator User(UserRegisterModel regUser) => new()
     {
         Username = regUser.userName,
         Email = regUser.email,
@@ -36,7 +27,7 @@ public class UserRegisterModel
         Gender = regUser.gender
     };
 
-    public static implicit operator UserRegisterModel(User user) => new()
+    public static explicit operator UserRegisterModel(User user) => new()
     {
         userName = user.Username,
         name = user.Name,
@@ -46,5 +37,3 @@ public class UserRegisterModel
         gender = user.Gender
     };
 }
-
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.

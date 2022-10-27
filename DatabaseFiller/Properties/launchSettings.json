@@ -1,0 +1,12 @@
+﻿{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "DatabaseFiller": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "MOVIE_CATALOG_CONN": "User Id=C##MovieCatalog;Password=mcdevpass;Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=orcl)))",
+        "TOKEN_LIST_CONN": "User Id=C##TokenList;Password=tldevpass;Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=orcl)))"
+      }
+    }
+  }
+}

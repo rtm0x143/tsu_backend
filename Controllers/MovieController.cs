@@ -4,7 +4,7 @@ using MovieCatalogBackend.Services.Repositories;
 
 namespace MovieCatalogBackend.Controllers;
 
-[Route("api/movie")]
+[Route("api/movies")]
 public class MovieController : ControllerBase
 {
     private readonly IMovieRepository _movieRepository;

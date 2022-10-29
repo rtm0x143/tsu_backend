@@ -7,7 +7,6 @@ using MovieCatalogBackend.Services;
 using MovieCatalogBackend.Services.Authentication;
 using MovieCatalogBackend.Services.Repositories;
 using MovieCatalogBackend.Services.UserServices;
-using UserService = MovieCatalogBackend.Services.UserServices.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationHelper.BaseConfiguration = builder.Configuration;
@@ -67,6 +66,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+if (builder.Environment.IsProduction())
+{
+    if (builder.Configuration.GetValue<string>("LaunchSettings:applicationUrl") is string urls)
+        builder.WebHost.UseUrls(urls);
 }
 
 // Startup cleaner  

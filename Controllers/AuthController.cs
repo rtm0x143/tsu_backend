@@ -28,12 +28,11 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult> Register(UserRegisterModel regModel)
+    public async Task<ActionResult<TokenDto>> Register(UserRegisterModel regModel)
     {
         try
         {
-            await _userService.Register(regModel);
-            return Ok();
+            return Ok(_tokenService.GenerateTokenFor(await _userService.Register(regModel), Request));
         }
         catch (BadModelException e)
         {

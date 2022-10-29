@@ -1,18 +1,18 @@
 ﻿using MovieCatalogBackend.Data.MovieCatalog.Dtos;
 using Microsoft.AspNetCore.Mvc;
-using MovieCatalogBackend.Services.MovieServices;
+using MovieCatalogBackend.Services.Repositories;
 
 namespace MovieCatalogBackend.Controllers;
 
 [Route("api/movie")]
 public class MovieController : ControllerBase
 {
-    private readonly IMovieSelector _movieSelector;
+    private readonly IMovieRepository _movieRepository;
     private readonly ILogger _logger;
 
-    public MovieController(IMovieSelector movieSelector, ILogger<MovieController> logger)
+    public MovieController(IMovieRepository movieRepository, ILogger<MovieController> logger)
     {
-        _movieSelector = movieSelector;
+        _movieRepository = movieRepository;
         _logger = logger;
     }
 
@@ -33,9 +33,9 @@ public class MovieController : ControllerBase
                 {
                     pageSize = pageSize,
                     currentPage = page,
-                    pageCount = (int)Math.Ceiling((double)_movieSelector.Count / pageSize)
+                    pageCount = (int)Math.Ceiling((double)_movieRepository.Count / pageSize)
                 },
-                movies = _movieSelector.GetFromMovies((page - 1) * pageSize, pageSize, m => (MovieElementModel)m)
+                movies = _movieRepository.GetFromMovies((page - 1) * pageSize, pageSize, m => (MovieElementModel)m)
             };
         }
         catch (Exception ex)
@@ -51,7 +51,7 @@ public class MovieController : ControllerBase
     {
         try
         {
-            return (MovieDetailsModel)_movieSelector.GetMovieVerbose(id);
+            return (MovieDetailsModel)_movieRepository.GetMovieVerbose(id);
         }
         catch (InvalidOperationException ex)
         {

@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using MovieCatalogBackend.Data.MovieCatalog;
 using MovieCatalogBackend.Data.Tokens;
 using Microsoft.AspNetCore.Authentication;
 using MovieCatalogBackend.Data.MovieCatalog.Dtos;
+using MovieCatalogBackend.Exceptions;
 using MovieCatalogBackend.Services.Authentication;
+using MovieCatalogBackend.Services.UserServices;
 
 namespace MovieCatalogBackend.Controllers;
 
@@ -13,45 +14,42 @@ namespace MovieCatalogBackend.Controllers;
 public class AccountController : ControllerBase
 {
     private readonly ITokenService _tokenService;
-    private readonly MovieCatalogContext _context;
-    private  readonly ILogger _logger;
+    private readonly IUserService _userService;
+    private readonly ILogger _logger;
 
-    public AccountController(MovieCatalogContext context, ITokenService tokenService, ILogger<AccountController> logger)
+    public AccountController(IUserService userService, ITokenService tokenService, ILogger<AccountController> logger)
     {
-        _context = context;
+        _userService = userService;
         _tokenService = tokenService;
         _logger = logger;
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult> Register(UserRegisterModel regUser) 
+    public async Task<ActionResult> Register(UserRegisterModel regModel)
     {
         try
         {
-            var collision = _context.User
-                .FirstOrDefault(user => user.Username == regUser.userName || user.Email == regUser.email);
-
-            if (collision != null)
-                return Conflict(collision.Email == regUser.email ? "Email already used" : "Username already used");
-
-            _context.User.Add((User)regUser);
-            await _context.SaveChangesAsync();
+            await _userService.Register(regModel);
             return Ok();
         }
-        catch (Exception ex)
+        catch (BadModelException e)
         {
-            _logger.LogError(ex, "Occured while registration user : {user}", regUser);
+            return Conflict(ProblemDetailsFactory.CreateValidationProblemDetails(HttpContext, e.ModelState,
+                StatusCodes.Status409Conflict));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Occured while registration user : {user}", regModel);
             return StatusCode(500);
         }
     }
 
     [HttpPost("login")]
-    public ActionResult<TokenDto> Login(LoginCredentials credentials)
+    public async Task<ActionResult<TokenDto>> Login(LoginCredentials credentials)
     {
         try
         {
-            var user = _context.User
-                .FirstOrDefault(x => x.Username == credentials.username && x.Password == credentials.password);
+            var user = await _userService.UserFromLoginCredentials(credentials);
             if (user == null) return NotFound();
 
             var token = _tokenService.GenerateTokenFor(user, Request);

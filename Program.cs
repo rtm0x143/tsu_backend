@@ -5,7 +5,9 @@ using MovieCatalogBackend.Data.Tokens;
 using MovieCatalogBackend.Helpers;
 using MovieCatalogBackend.Services;
 using MovieCatalogBackend.Services.Authentication;
-using MovieCatalogBackend.Services.MovieServices;
+using MovieCatalogBackend.Services.Repositories;
+using MovieCatalogBackend.Services.UserServices;
+using UserService = MovieCatalogBackend.Services.UserServices.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationHelper.BaseConfiguration = builder.Configuration;
@@ -34,6 +36,7 @@ builder.Services
 builder.Services
     .AddScoped<ITokenService, TokenService>()
     .AddSingleton<TokenListCleanerDemon>()
+    .AddSingleton<IPasswordHasher, SimplePasswordHasher>()
     .AddScoped<IAuthorizationHandler, TokenNotBlackedAuthorizationHandler>()
     .AddAuthorization(options =>
         options.AddPolicy("TokenNotBlacked", 
@@ -55,7 +58,8 @@ builder.Services
 
 // Other services
 builder.Services
-    .AddScoped<IMovieSelector, MovieSelectService>();
+    .AddScoped<IMovieRepository, MovieRepository>()
+    .AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

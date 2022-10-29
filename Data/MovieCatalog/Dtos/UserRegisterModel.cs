@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace MovieCatalogBackend.Data.MovieCatalog.Dtos;
 
@@ -17,23 +19,13 @@ public class UserRegisterModel
 
     public Gender? gender { get; set; }
 
-    public static explicit operator User(UserRegisterModel regUser) => new()
+    public User ToUser(string hashedPassword) => new()
     {
-        Username = regUser.userName,
-        Email = regUser.email,
-        Password = regUser.password,
-        Name = regUser.name,
-        BirthDate = regUser.birthDate != null ? DateTime.Parse(regUser.birthDate) : null,
-        Gender = regUser.gender
-    };
-
-    public static explicit operator UserRegisterModel(User user) => new()
-    {
-        userName = user.Username,
-        name = user.Name,
-        email = user.Email,
-        birthDate = user.BirthDate.ToString(),
-        password = user.Password,
-        gender = user.Gender
+        Username = userName,
+        Email = email,
+        Password = hashedPassword,
+        Name = name,
+        BirthDate = birthDate != null ? DateTime.Parse(birthDate) : null,
+        Gender = gender
     };
 }

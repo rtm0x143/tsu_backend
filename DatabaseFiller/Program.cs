@@ -122,7 +122,7 @@ internal static class Program
             await using var context = new MovieCatalogContext();
             var entity = context.Movie.Find(pair.Key);
             if (entity is null || pair.Value.Length == 0) continue;
-            entity.Genres = pair.Value.Where(g => !entity.Genres?.Contains(g) ?? false).ToArray();
+            entity.Genres = pair.Value.Where(g => !(entity.Genres?.Contains(g) ?? false)).ToArray();
             await context.SaveChangesAsync();
         }
 

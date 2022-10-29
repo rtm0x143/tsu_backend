@@ -7,7 +7,7 @@ public class TokenListContext : DbContext
 {
     public DbSet<BlackedToken> Tokens { get; set; }
 
-    public TokenListContext() : base() { }
+    public TokenListContext() { }
     public TokenListContext(DbContextOptions<TokenListContext> options) : base(options) { }
 
     public static void BuildOptions(IServiceProvider serviceProvider, DbContextOptionsBuilder optionsBuilder) =>
@@ -15,13 +15,13 @@ public class TokenListContext : DbContext
 
     public static void BuildOptions(IConfiguration configuration, DbContextOptionsBuilder optionsBuilder)
     {
-        var _connection = configuration.GetConnectionString("TokenList")    // connection from appsettings.json
+        var connection = configuration.GetConnectionString("TokenList")    // connection from appsettings.json
                           ?? configuration.GetValue<string>("TOKEN_LIST_CONN");           // Environment variable
         
-        if (_connection == null)
+        if (connection == null)
             throw new ArgumentException("Couldn't find connection string for TokenListContext in configuration");
 
-        optionsBuilder.UseOracle(_connection);
+        optionsBuilder.UseOracle(connection);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

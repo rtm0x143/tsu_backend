@@ -40,11 +40,11 @@ public class User : IHasGuid
 
     [Required(AllowEmptyStrings = false)]
     [MaxLength(64)]
-    public string Username { get; set; }
+    public string? Username { get; set; }
 
     [Required]
     [MaxLength(64)]
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     public DateTime? BirthDate { get; set; }
 

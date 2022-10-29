@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Data;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using MovieCatalogBackend.Data.Tokens;
 using Microsoft.AspNetCore.Authentication;
+using MovieCatalogBackend.Data.MovieCatalog;
 using MovieCatalogBackend.Data.MovieCatalog.Dtos;
 using MovieCatalogBackend.Exceptions;
+using MovieCatalogBackend.Helpers;
 using MovieCatalogBackend.Services.Authentication;
 using MovieCatalogBackend.Services.UserServices;
 
@@ -11,13 +14,13 @@ namespace MovieCatalogBackend.Controllers;
 
 [ApiController]
 [Route("api/account")]
-public class AccountController : ControllerBase
+public class AuthController : ControllerBase
 {
     private readonly ITokenService _tokenService;
     private readonly IUserService _userService;
     private readonly ILogger _logger;
 
-    public AccountController(IUserService userService, ITokenService tokenService, ILogger<AccountController> logger)
+    public AuthController(IUserService userService, ITokenService tokenService, ILogger<AuthController> logger)
     {
         _userService = userService;
         _tokenService = tokenService;

@@ -1,11 +1,15 @@
 ﻿using MovieCatalogBackend.Data.MovieCatalog.Dtos;
 using MovieCatalogBackend.Exceptions;
 using MovieCatalogBackend.Data.MovieCatalog;
+using Microsoft.EntityFrameworkCore;
 
 namespace MovieCatalogBackend.Services.UserServices;
 
 public interface IUserService
 {
+    /// <exception cref="DbUpdateConcurrencyException">
+    /// When set value to unknown id 
+    /// </exception>
     public User? this[Guid id] { get; set; }
 
     /// <exception cref="BadModelException">

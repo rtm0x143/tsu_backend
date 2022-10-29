@@ -27,6 +27,7 @@ public class UserService : IUserService
                 _context.User.Remove(new User { Id = id }); 
             else
                 _context.User.Update(value);
+            _context.SaveChanges();
         }
     }
 

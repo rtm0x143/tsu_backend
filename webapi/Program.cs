@@ -78,7 +78,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-if (app.Configuration.GetValue<bool>("MigrateDatabases"))
+if (app.Configuration.GetValue<string>("MigrateDatabases") is "YES")
     app.Services.MigrateDatabases();
 
 // Startup cleaner  

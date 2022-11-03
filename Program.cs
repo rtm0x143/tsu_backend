@@ -16,6 +16,12 @@ builder.Services
     .AddSwaggerGen()
     .AddControllers();
 
+if (builder.Environment.IsProduction())
+{
+    if (builder.Configuration.GetValue<string>("LaunchSettings:applicationUrl") is string urls)
+        builder.WebHost.UseUrls(urls);
+}
+
 var authenticationOptions = new AuthenticationOptions(builder.Configuration);
 var serverUrls = builder.WebHost.GetSetting(WebHostDefaults.ServerUrlsKey)?.Split(";").ToHashSet();
 if (serverUrls != null)
@@ -39,7 +45,11 @@ builder.Services
     .AddScoped<IAuthorizationHandler, TokenNotBlackedAuthorizationHandler>()
     .AddAuthorization(options =>
         options.AddPolicy("TokenNotBlacked", 
-            policyBuilder => policyBuilder.AddRequirements(TokenNotBlackedRequirements.Istance))
+            policyBuilder =>
+            {
+                policyBuilder.RequireAuthenticatedUser()
+                    .AddRequirements(TokenNotBlackedRequirements.Instance);
+            })
     );
 
 // DB contexts
@@ -68,11 +78,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-if (builder.Environment.IsProduction())
-{
-    if (builder.Configuration.GetValue<string>("LaunchSettings:applicationUrl") is string urls)
-        builder.WebHost.UseUrls(urls);
-}
+if (app.Configuration.GetValue<bool>("MigrateDatabases"))
+    app.Services.MigrateDatabases();
 
 // Startup cleaner  
 app.Services.GetService<TokenListCleanerDemon>();

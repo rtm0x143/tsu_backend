@@ -51,8 +51,9 @@ public class TokenListCleanerDemon : IDisposable
     {
         if (Disposed) return;
         _interruptionFlag = true;
-        _cleanupRateMutex.Dispose();
+        _cleanupRateMutex.ReleaseMutex();
         _demon.Join();  
+        _cleanupRateMutex.Dispose();
         GC.SuppressFinalize(this);
         Disposed = true;
     }

@@ -40,7 +40,7 @@ public class UserService : IUserService
             await _context.SaveChangesAsync();
             return user;
         }
-        catch (DbUpdateConcurrencyException e) when (e.InnerException is OracleException { Number: 1 })
+        catch (DbUpdateException e) when (e.InnerException is OracleException { Number: 1 })
         {
             var collision = _context.User
                 .FirstOrDefault(user => user.Username == regModel.userName || user.Email == regModel.email);

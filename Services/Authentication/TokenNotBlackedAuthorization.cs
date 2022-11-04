@@ -6,7 +6,7 @@ namespace MovieCatalogBackend.Services.Authentication;
 public class TokenNotBlackedRequirements : IAuthorizationRequirement
 {
     protected TokenNotBlackedRequirements() { }
-    public static TokenNotBlackedRequirements Istance = new();
+    public static TokenNotBlackedRequirements Instance = new();
 }
 
 public class TokenNotBlackedAuthorizationHandler : AuthorizationHandler<TokenNotBlackedRequirements, HttpContext>

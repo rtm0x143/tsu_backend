@@ -39,7 +39,11 @@ builder.Services
     .AddScoped<IAuthorizationHandler, TokenNotBlackedAuthorizationHandler>()
     .AddAuthorization(options =>
         options.AddPolicy("TokenNotBlacked", 
-            policyBuilder => policyBuilder.AddRequirements(TokenNotBlackedRequirements.Istance))
+            policyBuilder =>
+            {
+                policyBuilder.RequireAuthenticatedUser()
+                    .AddRequirements(TokenNotBlackedRequirements.Instance);
+            })
     );
 
 // DB contexts
@@ -76,7 +80,7 @@ if (builder.Environment.IsProduction())
 
 // Startup cleaner  
 app.Services.GetService<TokenListCleanerDemon>();
-
+ 
 app.UseHttpsRedirection();
 app.UseRouting();
 

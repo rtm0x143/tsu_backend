@@ -8,7 +8,7 @@ public class AuthenticationOptions
     public HashSet<string> Issuers { get; } = new();
     public HashSet<string> Audiences { get; } = new();
     public string? SecretKey { get; set; }
-    public TimeSpan LiveTime { get; set; } = TimeSpan.FromHours(6.0d);
+    public TimeSpan LiveTime { get; set; } = TimeSpan.FromMinutes(1); //= TimeSpan.FromHours(6.0d);
 
     public SymmetricSecurityKey? SecurityKey => 
         SecretKey != null 
@@ -26,8 +26,9 @@ public class AuthenticationOptions
 
     public TokenValidationParameters CreateValidationParameters()
     {
-        var parameters = new TokenValidationParameters() { ValidateLifetime = true };
-
+        var parameters = new TokenValidationParameters { ValidateLifetime = true };
+        parameters.ClockSkew = TimeSpan.Zero;
+        
         if (parameters.ValidateIssuerSigningKey = SecretKey != null)
             parameters.IssuerSigningKey = SecurityKey;
         if (parameters.ValidateIssuer = Issuers.Count > 0)

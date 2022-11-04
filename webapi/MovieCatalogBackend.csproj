@@ -28,6 +28,9 @@
 
   <ItemGroup>
     <None Remove="DatabaseFiller\**" />
+    <None Update="entrypoint.sh">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

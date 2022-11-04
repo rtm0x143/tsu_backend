@@ -1,0 +1,28 @@
+version: "3"
+services:
+  database:
+    env_file:
+      - ./database/.env 
+    build: ./database
+    container_name: database
+    ports:
+      - 1521:1521
+      #environment:
+      #ORACLE_PASSWORD: root
+      #ORACLE_DATABASE: orcl
+    volumes:
+      - "./database/volume:/opt/oracle/oradata"
+
+  webapi:
+    user: ${UID}:${GID}
+    build: ./webapi
+    container_name: webapi
+    ports:
+      - 80:5000
+    environment:
+      MigrateDatabases: "YES"
+      MOVIE_CATALOG_CONN: "User Id=C##MovieCatalog;Password=mcdevpass;Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=database)(PORT=1521)(CONNECT_DATA=(SERVICE_NAME=orcl))))"
+      TOKEN_LIST_CONN: "User Id=C##TokenList;Password=tldevpass;Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=database)(PORT=1521)(CONNECT_DATA=(SERVICE_NAME=orcl))))"
+    depends_on: 
+      - database
+    

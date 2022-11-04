@@ -4,3 +4,5 @@ obj
 *.user
 .config
 .idea
+*.sln.DotSettings
+database/volume

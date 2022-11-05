@@ -40,9 +40,8 @@ public class MovieController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Unknown exception while selecting page : {page}, pageSize : {pageSize}",
-                page, pageSize);
-            return StatusCode(500);
+            _logger.LogError(ex, $"Unknown exception while selecting page : {page}, pageSize : {pageSize}");
+            return Problem(title: "Unexpected exception occured");
         }
     }
 
@@ -59,8 +58,8 @@ public class MovieController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Unknown exception while finding movie with id : {id}", id);
-            return StatusCode(500);
+            _logger.LogError(ex, $"Unknown exception while finding movie with id : {id}");
+            return Problem(title: "Unexpected exception occured");
         }
     }
 }

@@ -32,7 +32,7 @@ public class FavoritesController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "While fetching favorites for user : {id}", id);
-            return StatusCode(500);
+            return Problem(title: "Unexpected exception occured");
         }
     }
 
@@ -54,7 +54,7 @@ public class FavoritesController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, $"Unknown error while adding favorite movie({movieId}) to user({userId})");
-            return StatusCode(500);
+            return Problem(title: "Unexpected exception occured");
         }
     }
 
@@ -77,7 +77,7 @@ public class FavoritesController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, $"Unknown error while adding favorite movie({movieId}) to user({userId})");
-            return StatusCode(500);
+            return Problem(title: "Unexpected exception occured");
         }
     }
 }

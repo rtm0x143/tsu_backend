@@ -32,7 +32,7 @@ public class UserController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, $"Unknown exception while getting user's({userId}) profile");
-            return StatusCode(500);
+            return Problem(title: "Unexpected exception occured");
         }
     }
     
@@ -54,7 +54,7 @@ public class UserController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, $"Unknown exception while updating user's({userId}) profile");
-            return StatusCode(500);
+            return Problem(title: "Unexpected exception occured");
         }
     }
 }

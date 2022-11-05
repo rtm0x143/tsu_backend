@@ -33,13 +33,12 @@ public class ReviewController : ControllerBase
         }
         catch (DbUpdateException e) when (e.InnerException is OracleException { Number: 1 })
         {
-            return Conflict(ProblemDetailsFactory.CreateProblemDetails(HttpContext, StatusCodes.Status409Conflict,
-                detail: "User has already had review for this movie"));
+            return Problem("User has already had review for this movie", statusCode: StatusCodes.Status409Conflict);
         }
         catch (Exception e)
         {
             _logger.LogError(e, $"Unknown exception while creating review from user({userId}) on movie({movieId})");
-            return StatusCode(500);
+            return Problem(title: "Unexpected exception occured");
         }
 
         return Ok();
@@ -58,14 +57,13 @@ public class ReviewController : ControllerBase
         catch (DbUpdateConcurrencyException e)
         {
             _logger.LogWarning(e, $"Occured while deleting review({reviewId})");
-            return NotFound(ProblemDetailsFactory.CreateProblemDetails(HttpContext, StatusCodes.Status404NotFound,
-                detail: "Unknown review id"));
+            return Problem(title: "Unknown review id", statusCode: StatusCodes.Status404NotFound);
         }
         catch (Exception e)
         {
             User.SidAsGuid(out var userId);
             _logger.LogError(e, $"Unknown exception while deleting review from user({userId}) on movie({movieId})");
-            return StatusCode(500);
+            return Problem(title: "Unexpected exception occured");
         }
     }
 
@@ -83,13 +81,12 @@ public class ReviewController : ControllerBase
         catch (DbUpdateConcurrencyException e)
         {
             _logger.LogWarning(e, $"Occured while editing review({reviewId})");
-            return NotFound(ProblemDetailsFactory.CreateProblemDetails(HttpContext, StatusCodes.Status404NotFound,
-                detail: "Unknown review id"));
+            return Problem(title: "Unknown review id", statusCode: StatusCodes.Status404NotFound);
         }
         catch (Exception e)
         {
             _logger.LogError(e, $"Unknown exception while editing review from user({userId}) on movie({movieId})");
-            return StatusCode(500);
+            return Problem(title: "Unexpected exception occured");
         }
     }
 }

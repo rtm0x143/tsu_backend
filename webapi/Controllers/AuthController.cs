@@ -1,12 +1,9 @@
-﻿using System.Data;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using MovieCatalogBackend.Data.Tokens;
 using Microsoft.AspNetCore.Authentication;
-using MovieCatalogBackend.Data.MovieCatalog;
 using MovieCatalogBackend.Data.MovieCatalog.Dtos;
 using MovieCatalogBackend.Exceptions;
-using MovieCatalogBackend.Helpers;
 using MovieCatalogBackend.Services.Authentication;
 using MovieCatalogBackend.Services.UserServices;
 
@@ -41,8 +38,8 @@ public class AuthController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Occured while registration user : {user}", regModel);
-            return StatusCode(500);
+            _logger.LogError(e, $"Occured while registration user({regModel})");
+            return Problem(title: "Unexpected exception occured");
         }
     }
 
@@ -55,14 +52,14 @@ public class AuthController : ControllerBase
             if (user == null) return NotFound();
 
             var token = _tokenService.GenerateTokenFor(user, Request);
-            _logger.LogInformation("Generated token for user with id : {id}", user.Id);
+            _logger.LogInformation($"Generated token for user with id : {user.Id}");
 
             return Ok(new TokenDto(token));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Unknown exception while authorizing with input ({})", credentials);
-            return StatusCode(500);
+            _logger.LogError(ex, $"Unknown exception while authorizing with input ({credentials})");
+            return Problem(title: "Unexpected exception occured");
         }
     }
 
@@ -72,7 +69,15 @@ public class AuthController : ControllerBase
     {
         var token = await HttpContext.GetTokenAsync("access_token");
         if (token is null) return Unauthorized();
-        await _tokenService.RejectToken(token);
-        return Ok();
+        try
+        {
+            await _tokenService.RejectToken(token);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"Unknown exception while rejecting token({token})");
+            return Problem(title: "Unexpected exception occured");
+        }
     }
 }

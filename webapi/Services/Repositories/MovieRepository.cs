@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieCatalogBackend.Data.MovieCatalog;
+using MovieCatalogBackend.Data.MovieCatalog.Dtos;
 
 namespace MovieCatalogBackend.Services.Repositories;
 
@@ -34,6 +35,8 @@ public class MovieRepository : RepositoryBase, IMovieRepository
         }
     }
 
+    public void Add(Movie model) => _context.Movie.Add(model);
+    
     public IQueryable<Movie> FetchSomeMovies(int begin, int amount) =>
         _context.Movie
             .Include(m => m.Genres)

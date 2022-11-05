@@ -1,6 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using Microsoft.EntityFrameworkCore;
 using MovieCatalogBackend.Data.MovieCatalog;
+using MovieCatalogBackend.Data.MovieCatalog.Dtos;
 using NuGet.Packaging.Signing;
 
 namespace MovieCatalogBackend.Services.Repositories;
@@ -19,6 +20,8 @@ public interface IMovieRepository : IRepository
     public Movie GetMovieVerbose(Guid id);
     
     public Movie? this[Guid id] { get; set; }
+
+    public void Add(Movie model);
 
     /// <summary>
     /// Gets bunch of movies with <see cref="Movie.Genres"/> and <see cref="Movie.Reviews"/> includes 

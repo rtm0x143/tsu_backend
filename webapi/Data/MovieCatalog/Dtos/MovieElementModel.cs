@@ -4,15 +4,15 @@ namespace MovieCatalogBackend.Data.MovieCatalog.Dtos;
 
 public record MovieElementModel
 {
-    public Guid id { get; set; }
+    [Required] public Guid id { get; set; }
     public string? name { get; set; }
 
     [DataType(DataType.ImageUrl)] public string? poster { get; set; }
 
     public short year { get; set; }
     public string? country { get; set; }
-    [Required] public GenreModel[] genres { get; set; }
-    [Required] public ReviewShortModel[] reviews { get; set; }
+    [Required] public GenreModel[]? genres { get; set; }
+    [Required] public ReviewShortModel[]? reviews { get; set; }
 
     public static explicit operator MovieElementModel(Movie movie) => new()
     {

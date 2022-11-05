@@ -43,13 +43,20 @@ builder.Services
     .AddSingleton<TokenListCleanerDemon>()
     .AddSingleton<IPasswordHasher, SimplePasswordHasher>()
     .AddScoped<IAuthorizationHandler, TokenNotBlackedAuthorizationHandler>()
+    .AddScoped<IAuthorizationHandler, UserPrivilegeAuthorizationHandler>()
     .AddAuthorization(options =>
-        options.AddPolicy("TokenNotBlacked", 
-            policyBuilder =>
+        {
+            options.AddPolicy("TokenNotBlacked", policyBuilder =>
             {
                 policyBuilder.RequireAuthenticatedUser()
                     .AddRequirements(TokenNotBlackedRequirements.Instance);
-            })
+            });
+            options.AddPolicy("EditorPermissions", policyBuilder =>
+            {
+                policyBuilder.RequireAuthenticatedUser()
+                    .AddRequirements(new UserPrivilegeRequirement(UserPrivilegeMask.Editor));
+            });
+        }
     );
 
 // DB contexts

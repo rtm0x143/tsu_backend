@@ -5,7 +5,6 @@ namespace MovieCatalogBackend.Data.MovieCatalog.Dtos;
 public record MovieDetailsModel : MovieElementModel
 {
     public string? description { get; set; }
-    public string? country { get; set; }
     public int time { get; set; }
     public string? tagLine { get; set; }
     public string? director { get; set; }
@@ -13,7 +12,7 @@ public record MovieDetailsModel : MovieElementModel
     public int? fees { get; set; }
     public short ageLimit { get; set; }
 
-    [Required] public new ReviewModel[] reviews { get; set; }
+    [Required] public new ReviewModel[]? reviews { get; set; }
 
     public static explicit operator MovieDetailsModel(Movie movie) => new()
     {
@@ -44,7 +43,7 @@ public record MovieDetailsModel : MovieElementModel
         Genres = movieDetails.genres.Select(g => (Genre)g).ToArray(),
         Name = movieDetails.name,
         Poster = movieDetails.poster,
-        Reviews = movieDetails.reviews.Select(model => model.ToReview(movieDetails.id)).ToArray(),
+        Reviews = movieDetails.reviews?.Select(model => model.ToReview(movieDetails.id)).ToArray(),
         Time = movieDetails.time,
         Year = movieDetails.year,
         AgeLimit = movieDetails.ageLimit,

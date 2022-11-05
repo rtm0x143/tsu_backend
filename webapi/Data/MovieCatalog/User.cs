@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using MovieCatalogBackend.Services.Authentication;
 
 namespace MovieCatalogBackend.Data.MovieCatalog;
 
@@ -8,23 +9,6 @@ public enum Gender : byte
 {
     Female,
     Male
-}
-
-public enum UserRole : byte
-{
-    User = 0x0F,
-    Admin = 0xFF
-}
-
-public enum UserPrivilegeMask : byte
-{
-    Admin = 0b10000000,
-    User = 0b0001000
-}
-
-public static class UserPrivilege
-{
-    public static bool HasPrivilege(UserRole role, UserPrivilegeMask privilege) => ((byte)role & (byte)privilege) > 0;
 }
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -58,15 +42,7 @@ public record User : IHasGuid
     public string Password { get; set; }
 
     [NotMapped]
-    public virtual bool IsAdmin 
-    { 
-        get => ((byte)Role & (byte)UserPrivilegeMask.Admin) > 0;
-        set
-        {
-            if (value == IsAdmin) return;
-            Role = (UserRole)((byte)Role + (value ? 1 : -1) * (byte)UserPrivilegeMask.Admin);
-        }
-    }
+    public virtual bool IsAdmin => ((byte)Role & (byte)UserPrivilegeMask.Admin) > 0;
 
     public Gender? Gender { get; set; }
 

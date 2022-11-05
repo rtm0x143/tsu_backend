@@ -8,7 +8,6 @@ public abstract class RepositoryBase : IRepository
     protected bool IsDisposed;
     protected ILogger _logger;
 
-    public ModelStateDictionary ModelState { get; } = new();
     public abstract DbContext InnerDbContext { get; }
 
     public RepositoryBase(ILogger logger) => _logger = logger;

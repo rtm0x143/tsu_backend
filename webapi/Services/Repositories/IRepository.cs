@@ -5,7 +5,6 @@ namespace MovieCatalogBackend.Services.Repositories;
 
 public interface IRepository : IDisposable, IAsyncDisposable
 {
-    public ModelStateDictionary ModelState { get; }
     public DbContext InnerDbContext { get; }
     
     /// <remarks>

@@ -2,6 +2,8 @@
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 
+namespace MovieCatalogBackend.Services.Authentication;
+
 public interface IPasswordHasher : IPasswordHasher<object> { } 
 
 class SimplePasswordHasher : IPasswordHasher

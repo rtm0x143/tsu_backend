@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MovieCatalogBackend.Data.MovieCatalog;
 using MovieCatalogBackend.Data.MovieCatalog.Dtos;
 using MovieCatalogBackend.Exceptions;
+using MovieCatalogBackend.Services.Authentication;
 using Oracle.ManagedDataAccess.Client;
 
 namespace MovieCatalogBackend.Services.UserServices;
@@ -106,13 +107,11 @@ public class UserService : IUserService
         }
     }
 
-    public async ValueTask<MoviesListModel> GetFavoriteMovies(Guid id) => new()
-    {
-        movies = await _context.FavoriteMovie
+    public async ValueTask<Movie[]> GetFavoriteMovies(Guid id) => 
+        await _context.FavoriteMovie
             .Include("Movie.Reviews.Creator")
             .Include("Movie.Genres")
             .Where(fm => fm.UserId == id)
-            .Select(fm => (MovieElementModel)fm.Movie)
-            .ToArrayAsync()
-    };
+            .Select(fm => fm.Movie)
+            .ToArrayAsync();
 }

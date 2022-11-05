@@ -29,5 +29,5 @@ public interface IUserService
     /// </exception>
     public ValueTask RemoveFavoriteMovie(Guid userId, Guid movieId);
 
-    public ValueTask<MoviesListModel> GetFavoriteMovies(Guid id);
+    public ValueTask<Movie[]> GetFavoriteMovies(Guid id);
 }

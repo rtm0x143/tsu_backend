@@ -27,7 +27,7 @@ public class FavoritesController : ControllerBase
         if (!User.SidAsGuid(out var id)) return Unauthorized();
         try
         {
-            return await _userService.GetFavoriteMovies(id);
+            return MoviesListModel.From(await _userService.GetFavoriteMovies(id));
         }
         catch (Exception e)
         {

@@ -3,6 +3,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using MovieCatalogBackend.Data.MovieCatalog;
 using MovieCatalogBackend.Data.Tokens;
+using Microsoft.EntityFrameworkCore;
 
 namespace MovieCatalogBackend.Services.Authentication;
 
@@ -10,37 +11,28 @@ public class TokenService : ITokenService
 {
     private AuthenticationOptions _authOptions;
     private TokenListContext _tokenListContext;
-    private ILogger _logger;
 
-    public TokenService(AuthenticationOptions options, TokenListContext tokenListContext, ILogger<TokenService> logger)
+    public TokenService(AuthenticationOptions options, TokenListContext tokenListContext)
     {
         _authOptions = options;
         _tokenListContext = tokenListContext;
-        _logger = logger;
     }
 
+    /// <exception cref="DbUpdateException">see<see cref="DbContext"/> for details</exception>
     public async Task RejectToken(string token)
     {
         var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
         if (jwt.ValidTo < DateTime.UtcNow) return;
          
-        try
-        {
-            _tokenListContext.Tokens.Add(new BlackedToken() { Expiretion = jwt.ValidTo, Token = token });
-            await _tokenListContext.SaveChangesAsync();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error occured while saving rejected token");
-        }
+        _tokenListContext.Tokens.Add(new BlackedToken() { Expiretion = jwt.ValidTo, Token = token });
+        await _tokenListContext.SaveChangesAsync();
     }
 
     public string GenerateToken(User user, string issuer, string audience)
     {
-        Claim[] claims = new[]
-        {
-            new Claim(ClaimTypes.Sid, user.Id.ToString()),
-            new Claim(ClaimTypes.Role, user.Role.ToString())
+        Claim[] claims = {
+            new(ClaimTypes.Sid, user.Id.ToString()),
+            new(ClaimTypes.Role, user.Role.ToString())
         };
         
         var genTime = DateTime.UtcNow;

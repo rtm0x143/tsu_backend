@@ -8,6 +8,8 @@ using MovieCatalogBackend.Services.UserServices;
 
 namespace MovieCatalogBackend.Controllers;
 
+[ApiController]
+[Route("api/account")]
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -23,7 +25,7 @@ public class UserController : ControllerBase
     [HttpGet("profile")]
     public ActionResult<ProfileModel> GetProfile()
     {
-        if (User.SidAsGuid(out var userId)) return Unauthorized();
+        if (!User.SidAsGuid(out var userId)) return Unauthorized();
         try
         {
             if (_userService[userId] is not User user) return NotFound();
@@ -40,7 +42,7 @@ public class UserController : ControllerBase
     [HttpPut("profile")]
     public ActionResult PutProfile(ProfileModel model)
     {
-        if (User.SidAsGuid(out var userId)) return Unauthorized();
+        if (!User.SidAsGuid(out var userId)) return Unauthorized();
         try
         {
             _userService[userId] = model.ToUser(userId);

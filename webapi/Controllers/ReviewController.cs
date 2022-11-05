@@ -71,7 +71,7 @@ public class ReviewController : ControllerBase
     [HttpPost("{reviewId}/edit")]
     public async Task<ActionResult> Edit(Guid movieId, Guid reviewId, ReviewModifyModel model)
     {
-        if (User.SidAsGuid(out var userId)) return Unauthorized();
+        if (!User.SidAsGuid(out var userId)) return Unauthorized();
         try
         {
             _context.Review.Update(model.ToReview(userId, movieId, reviewId));

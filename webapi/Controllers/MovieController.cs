@@ -55,7 +55,7 @@ public class MovieController : ControllerBase
         {
             return (MovieDetailsModel)_movieRepository.GetMovieVerbose(id);
         }
-        catch (InvalidOperationException ex)
+        catch (InvalidOperationException)
         {
             return NotFound();
         }
@@ -69,7 +69,7 @@ public class MovieController : ControllerBase
     [HttpPost]
     [Authorize(Policy = "EditorPermissions")]
     [Authorize(Policy = "TokenNotBlacked")]
-    public async Task<ActionResult> Post(MovieCreationModel details)
+    public async Task<ActionResult> PostMovie([FromBody] MovieCreationModel details)
     {
         try
         {
@@ -87,7 +87,7 @@ public class MovieController : ControllerBase
     [HttpPut]
     [Authorize(Policy = "EditorPermissions")]
     [Authorize(Policy = "TokenNotBlacked")]
-    public async Task<ActionResult> Put(MovieDetailsModel model)
+    public async Task<ActionResult> PutMovie([FromBody] MovieDetailsModel model)
     {
         try
         {

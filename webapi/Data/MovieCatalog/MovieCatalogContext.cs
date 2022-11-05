@@ -10,6 +10,7 @@ public class MovieCatalogContext : DbContext
     public DbSet<Review> Review { get; set; }
     public DbSet<Genre> Genre { get; set; }
     public DbSet<FavoriteMovie> FavoriteMovie { get; set; }
+    public DbSet<GenreMovie> GenreMovie { get; set; }
 
     public MovieCatalogContext(DbContextOptions<MovieCatalogContext> options) : base(options) { }
     public MovieCatalogContext() { }
@@ -42,6 +43,13 @@ public class MovieCatalogContext : DbContext
             .HasMany(u => u.Favorites)
             .WithMany(m => m.UsersFavored)
             .UsingEntity<FavoriteMovie>();
+        
+        modelBuilder.Entity<GenreMovie>().HasKey("MovieId", "GenreId");
+
+        modelBuilder.Entity<Movie>()
+            .HasMany(m => m.Genres)
+            .WithMany(g => g.Movies)
+            .UsingEntity<GenreMovie>();
         
         base.OnModelCreating(modelBuilder);
     }

@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Net.Http.Json;
 using MovieCatalogBackend.Data.MovieCatalog;
 using MovieCatalogBackend.Data.MovieCatalog.Dtos;
 using MovieCatalogBackend.Helpers;
+using MovieCatalogBackend.Services.Authentication;
 
 namespace DatabaseFiller;
 
@@ -12,9 +12,9 @@ internal static class Program
     internal static readonly HttpClient Client = new();
     internal static readonly string ApiUrl = "https://react-midterm.kreosoft.space/api";
 
-    static async Task Main()
+    internal static async Task<IEnumerable<MovieDetailsModel>> FetchMovieDetails()
     {
-        var movieIds = new List<Guid>();
+        var movies = new HashSet<MovieDetailsModel>();
         int page = 1, pageCount = 10;
         do
         {
@@ -32,107 +32,115 @@ internal static class Program
             }
 
             if (res is null) continue;
-
-            movieIds.AddRange(res.movies.Select(m => m.id));
             pageCount = res.pageInfo.pageCount;
+
+            foreach (var movie in res.movies)
+            {
+                MovieDetailsModel? movieDetails = null;
+                try
+                {
+                    movieDetails = await Client.GetAsync($"{ApiUrl}/movies/details/{movie.id}")
+                        .Result
+                        .Content
+                        .ReadFromJsonAsync<MovieDetailsModel>();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"{ex.Message}; \nOccured when fetching movie id : {movie.id}");
+                }
+
+                if (movieDetails is null) continue;
+                movieDetails.reviews = movieDetails.reviews
+                    ?.Where(r => r.author != null)
+                    .DistinctBy(md => md.id).ToArray() ?? Array.Empty<ReviewModel>();
+                movieDetails.genres = movieDetails.genres?.DistinctBy(g => g.id).ToArray();
+
+                movies.Add(movieDetails);
+            }
         } while (page <= pageCount);
 
-        var users = new HashSet<User>(HasIdEqualityComparer.Instance);
-        var genres = new HashSet<Genre>(HasIdEqualityComparer.Instance);
-        var reviews = new HashSet<Review>(HasIdEqualityComparer.Instance);
-        var moviesWithoutGenres = new HashSet<Movie>(HasIdEqualityComparer.Instance);
-        var moviesGenres = new Dictionary<Guid, Genre[]>();
+        return movies.DistinctBy(md => md.id);
+    }
 
-        foreach (var movieId in movieIds)
+    internal static Dictionary<Guid, Genre[]> PopGenres(IEnumerable<Movie> movies)
+    {
+        var movieGenres = new Dictionary<Guid, Genre[]>(movies.Count());
+        foreach (var movie in movies)
         {
-            MovieDetailsModel? movieDetails = null;
-            try
-            {
-                movieDetails = await Client.GetAsync($"{ApiUrl}/movies/details/{movieId}")
-                    .Result
-                    .Content
-                    .ReadFromJsonAsync<MovieDetailsModel>();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"{ex.Message}; \nOccured when fetching movie id : {movieId}");
-            }
+            if (movie.Genres is null) continue;
+            movieGenres.Add(movie.Id, movie.Genres.DistinctBy(g => g.Id).ToArray());
+            movie.Genres = null;
+        }
 
-            if (movieDetails is null) continue;
-            movieDetails.reviews = movieDetails.reviews
-                .Where(r => r.author != null)
-                .DistinctBy(md => md.id).ToArray();
-            movieDetails.genres = movieDetails.genres.DistinctBy(g => g.id).ToArray();
+        return movieGenres;
+    }
 
-            foreach (var review in movieDetails.reviews)
+    internal static Review[] ExtractReviews(IEnumerable<Movie> movies)
+    {
+        var reviews = new List<Review>();
+        foreach (var movie in movies)
+            if (movie.Reviews != null)
+                reviews.AddRange(movie.Reviews);
+        return reviews.DistinctBy(r => r.Id).ToArray();
+    }
+
+    internal static User[] ExtractUsers(IEnumerable<MovieDetailsModel> movieDetails, IPasswordHasher hasher)
+    {
+        var authors = new HashSet<User>(HasIdEqualityComparer.Instance);
+        foreach (var movieDetail in movieDetails)
+        {
+            if (movieDetail.reviews is null) continue;
+            foreach (var review in movieDetail.reviews)
             {
                 var user = review.author;
-                users.Add(new User
+                authors.Add(new User
                 {
-                    Avatar = user.avatar, Email = user.userId + "@mail.com", Id = user.userId,
-                    Username = user.nickName ?? user.userId.ToString(), Password = user.userId.ToString(),
+                    Avatar = user.avatar,
+                    Email = user.userId + "@mail.com",
+                    Id = user.userId,
+                    Username = user.nickName ?? user.userId.ToString(),
+                    Password = hasher.HashPassword(user, user.userId.ToString()),
                     Name = "blank"
                 });
-
-                reviews.Add(review.ToReview(movieId));
             }
-
-            foreach (var genre in movieDetails.genres)
-            {
-                genre.name ??= "blank";
-                genres.Add((Genre)genre);
-            }
-
-            var mov = (Movie)movieDetails;
-            moviesGenres.Add(movieDetails.id, mov.Genres?.ToArray() ?? Array.Empty<Genre>());
-            mov.Genres = null;
-            moviesWithoutGenres.Add(mov);
         }
 
-        await using (var context = new MovieCatalogContext())
-        {
-            context.User.AddRange(
-                users.Where(u => !context.User.Contains(u))
-                    .Distinct<User>(HasIdEqualityComparer.Instance)
-            );
-            await context.SaveChangesAsync();
-        }
+        return authors.ToArray();
+    }
 
-        await using (var context = new MovieCatalogContext())
-        {
-            context.Genre.AddRange(
-                genres.Where(g => !context.Genre.Contains(g))
-                    .Distinct<Genre>(HasIdEqualityComparer.Instance)
-            );
-            await context.SaveChangesAsync();
-        }
-        
-        await using (var context = new MovieCatalogContext())
-        {
-            context.Movie.AddRange(
-                moviesWithoutGenres.Where(m => !context.Movie.Contains(m))
-                    .DistinctBy(m => m.Id)
-                );
-            await context.SaveChangesAsync();
-        }
+    static async Task Main()
+    {
+        var movieDetails = await FetchMovieDetails();
+        var movies = movieDetails.Select(md => (Movie)md).ToArray();
+        var movieGenres = PopGenres(movies);
+
+        var genres = new HashSet<Genre>();
+        foreach (var someGenres in movieGenres.Values) genres.UnionWith(someGenres);
+
+        var reviews = ExtractReviews(movies);
+        var users = ExtractUsers(movieDetails, new SimplePasswordHasher());
+
+        var context = new MovieCatalogContext();
+
+        context.User.AddRange(users);
+        await context.SaveChangesAsync();
+
+        context.Genre.AddRange(genres);
+        await context.SaveChangesAsync();
+
+        context.Movie.AddRange(movies);
+        await context.SaveChangesAsync();
 
         // adding relations Genre-Movie
-        foreach (var pair in moviesGenres)
+        foreach (var pair in movieGenres)
         {
-            await using var context = new MovieCatalogContext();
             var entity = context.Movie.Find(pair.Key);
             if (entity is null || pair.Value.Length == 0) continue;
-            entity.Genres = pair.Value.Where(g => !(entity.Genres?.Contains(g) ?? false)).ToArray();
-            await context.SaveChangesAsync();
+
+            foreach (var genre in pair.Value)
+                context.GenreMovie.Add(new GenreMovie { GenreId = genre.Id, MovieId = entity.Id });
         }
 
-        await using (var context = new MovieCatalogContext())
-        {
-            context.Review.AddRange(
-                reviews.Where(r => !context.Review.Contains(r))
-                    .Distinct<Review>(HasIdEqualityComparer.Instance)
-            );
-            await context.SaveChangesAsync();
-        }
+        await context.SaveChangesAsync();
     }
 }

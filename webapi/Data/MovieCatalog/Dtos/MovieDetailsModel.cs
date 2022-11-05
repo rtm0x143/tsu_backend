@@ -40,7 +40,7 @@ public record MovieDetailsModel : MovieElementModel
         Description = movieDetails.description,
         Director = movieDetails.director,
         Fees = movieDetails.fees,
-        Genres = movieDetails.genres.Select(g => (Genre)g).ToArray(),
+        Genres = movieDetails.genres?.Select(g => (Genre)g).ToArray(),
         Name = movieDetails.name,
         Poster = movieDetails.poster,
         Reviews = movieDetails.reviews?.Select(model => model.ToReview(movieDetails.id)).ToArray(),

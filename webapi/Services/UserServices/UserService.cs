@@ -37,7 +37,7 @@ public class UserService : IUserService
         try
         {
             var user = regModel.ToUser(_passwordHasher.HashPassword(regModel, regModel.password));
-            await _context.User.AddAsync(user);
+            _context.User.Add(user);
             await _context.SaveChangesAsync();
             return user;
         }

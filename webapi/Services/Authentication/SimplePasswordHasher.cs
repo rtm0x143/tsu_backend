@@ -6,7 +6,7 @@ namespace MovieCatalogBackend.Services.Authentication;
 
 public interface IPasswordHasher : IPasswordHasher<object> { } 
 
-class SimplePasswordHasher : IPasswordHasher
+public class SimplePasswordHasher : IPasswordHasher
 {
     private SHA256 _hasher = SHA256.Create();
     public SimplePasswordHasher() { }

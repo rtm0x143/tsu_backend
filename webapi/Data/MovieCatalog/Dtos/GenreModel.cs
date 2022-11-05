@@ -2,7 +2,7 @@
 
 namespace MovieCatalogBackend.Data.MovieCatalog.Dtos;
 
-public class GenreModel
+public record GenreModel
 {
     [Required] public Guid id { get; set; }
     public string? name { get; set; }

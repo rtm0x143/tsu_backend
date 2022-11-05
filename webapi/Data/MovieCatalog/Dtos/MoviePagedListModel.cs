@@ -2,19 +2,22 @@
 
 namespace MovieCatalogBackend.Data.MovieCatalog.Dtos;
 
-public class PageInfoModel
+public record PageInfoModel
 {
     public int pageSize { get; set; }
     public int pageCount { get; set; }
     public int currentPage { get; set; }
 }
 
-public class MoviesListModel
+public record MoviesListModel
 {
     [Required] public MovieElementModel[] movies { get; set; }
+
+    public static MoviesListModel From(IEnumerable<Movie> movies) => new()
+        { movies = movies.Select(m => (MovieElementModel)m).ToArray() };
 }
 
-public class MoviePagedListModel : MoviesListModel
+public record MoviePagedListModel : MoviesListModel
 {
     [Required] public PageInfoModel pageInfo { get; set; }
 }

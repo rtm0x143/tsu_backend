@@ -31,7 +31,7 @@ public static class UserPrivilege
 
 [Index("Username", IsUnique = true)]
 [Index("Email", IsUnique = true)]
-public class User : IHasGuid
+public record User : IHasGuid
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }

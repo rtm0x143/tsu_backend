@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MovieCatalogBackend.Data.MovieCatalog.Dtos;
 
-public class UserRegisterModel
+public record UserRegisterModel
 {
     [Required] public string userName { get; set; }
     [Required] public string name { get; set; }

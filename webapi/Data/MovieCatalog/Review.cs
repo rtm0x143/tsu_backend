@@ -7,7 +7,7 @@ namespace MovieCatalogBackend.Data.MovieCatalog;
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 [Index("TargetMovieId", "CreatorId", IsUnique = true)] 
-public class Review : IHasGuid
+public record Review : IHasGuid
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }

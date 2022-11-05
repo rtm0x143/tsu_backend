@@ -2,7 +2,7 @@
 
 namespace MovieCatalogBackend.Data.MovieCatalog.Dtos;
 
-public class MovieElementModel
+public record MovieElementModel
 {
     public Guid id { get; set; }
     public string? name { get; set; }

@@ -2,13 +2,13 @@
 
 namespace MovieCatalogBackend.Data.MovieCatalog.Dtos;
 
-public class LoginCredentials
+public record LoginCredentials
 {
     [Required] public string username { get; set; }
     [Required] public string password { get; set; }
 }
 
-public class UserShortModel
+public record UserShortModel
 {
     public Guid userId { get; set; }
     public string? nickName { get; set; }

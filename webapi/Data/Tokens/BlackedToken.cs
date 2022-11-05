@@ -2,7 +2,7 @@
 
 namespace MovieCatalogBackend.Data.Tokens;
 
-public class BlackedToken
+public record BlackedToken
 {
     [Key]
     public string Token { get; set; }

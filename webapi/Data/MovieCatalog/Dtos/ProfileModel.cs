@@ -2,7 +2,7 @@
 
 namespace MovieCatalogBackend.Data.MovieCatalog.Dtos;
 
-public class ProfileModel
+public record ProfileModel
 {
     public Guid id { get; set; }
     public string? nickName { get; set; }

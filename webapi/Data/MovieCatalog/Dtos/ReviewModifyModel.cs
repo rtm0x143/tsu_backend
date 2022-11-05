@@ -2,7 +2,7 @@
 
 namespace MovieCatalogBackend.Data.MovieCatalog.Dtos;
 
-public class ReviewModifyModel
+public record ReviewModifyModel
 {
     [Required] public string reviewText { get; set; }
 

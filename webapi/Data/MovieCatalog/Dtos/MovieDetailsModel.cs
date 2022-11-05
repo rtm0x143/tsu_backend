@@ -2,7 +2,7 @@
 
 namespace MovieCatalogBackend.Data.MovieCatalog.Dtos;
 
-public class MovieDetailsModel : MovieElementModel
+public record MovieDetailsModel : MovieElementModel
 {
     public string? description { get; set; }
     public string? country { get; set; }

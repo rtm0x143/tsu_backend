@@ -2,7 +2,7 @@
 
 namespace MovieCatalogBackend.Data.MovieCatalog.Dtos;
 
-public class ReviewShortModel
+public record ReviewShortModel
 {
     [Required] public Guid id { get; set; }
     public int rating { get; set; }
@@ -10,7 +10,7 @@ public class ReviewShortModel
     public static explicit operator ReviewShortModel(Review review) => new() { id = review.Id, rating = review.Rating };
 }
 
-public class ReviewModel : ReviewShortModel
+public record ReviewModel : ReviewShortModel
 {
     public string? reviewText { get; set; }
     public bool isAnonymous { get; set; }

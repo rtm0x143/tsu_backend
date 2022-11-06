@@ -2,9 +2,10 @@ using MovieCatalogBackend.Data.MovieCatalog;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using MovieCatalogBackend.Data.Tokens;
+using MovieCatalogBackend.Exceptions;
 using MovieCatalogBackend.Helpers;
 using MovieCatalogBackend.Services;
-using MovieCatalogBackend.Services.Authentication;
+using MovieCatalogBackend.Services.Auth;
 using MovieCatalogBackend.Services.Repositories;
 using MovieCatalogBackend.Services.UserServices;
 
@@ -44,17 +45,14 @@ builder.Services
     .AddSingleton<IPasswordHasher, SimplePasswordHasher>()
     .AddScoped<IAuthorizationHandler, TokenNotBlackedAuthorizationHandler>()
     .AddScoped<IAuthorizationHandler, UserPrivilegeAuthorizationHandler>()
+    .AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>()
+    .AddSingleton<IAuthorizationMiddlewareResultHandler, AuthorizationResultTransformer>()
     .AddAuthorization(options =>
         {
             options.AddPolicy("TokenNotBlacked", policyBuilder =>
             {
                 policyBuilder.RequireAuthenticatedUser()
                     .AddRequirements(TokenNotBlackedRequirements.Instance);
-            });
-            options.AddPolicy("EditorPermissions", policyBuilder =>
-            {
-                policyBuilder.RequireAuthenticatedUser()
-                    .AddRequirements(new UserPrivilegeRequirement(UserPrivilegeMask.Editor));
             });
         }
     );

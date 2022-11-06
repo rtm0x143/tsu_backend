@@ -5,7 +5,7 @@ using MovieCatalogBackend.Data.MovieCatalog;
 using MovieCatalogBackend.Data.Tokens;
 using Microsoft.EntityFrameworkCore;
 
-namespace MovieCatalogBackend.Services.Authentication;
+namespace MovieCatalogBackend.Services.Auth;
 
 public class TokenService : ITokenService
 {

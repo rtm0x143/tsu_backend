@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 
-namespace MovieCatalogBackend.Services.Authentication;
+namespace MovieCatalogBackend.Services.Auth;
 
 public class TokenNotBlackedRequirements : IAuthorizationRequirement
 {

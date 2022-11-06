@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MovieCatalogBackend.Data.MovieCatalog;
 using MovieCatalogBackend.Data.MovieCatalog.Dtos;
 using MovieCatalogBackend.Exceptions;
-using MovieCatalogBackend.Services.Authentication;
+using MovieCatalogBackend.Services.Auth;
 using Oracle.ManagedDataAccess.Client;
 
 namespace MovieCatalogBackend.Services.UserServices;

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-using MovieCatalogBackend.Services.Authentication;
+using MovieCatalogBackend.Services.Auth;
 
 namespace MovieCatalogBackend.Data.MovieCatalog;
 

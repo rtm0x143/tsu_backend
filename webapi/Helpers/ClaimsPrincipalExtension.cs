@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using MovieCatalogBackend.Services.Authentication;
+using MovieCatalogBackend.Services.Auth;
 
 namespace MovieCatalogBackend.Helpers;
 

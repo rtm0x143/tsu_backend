@@ -1,6 +1,6 @@
 ﻿using MovieCatalogBackend.Data.MovieCatalog;
 
-namespace MovieCatalogBackend.Services.Authentication;
+namespace MovieCatalogBackend.Services.Auth;
 
 public interface ITokenService
 {

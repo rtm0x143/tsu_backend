@@ -1,14 +1,14 @@
 ﻿using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-namespace MovieCatalogBackend.Services.Authentication;
+namespace MovieCatalogBackend.Services.Auth;
 
 public class AuthenticationOptions
 {
     public HashSet<string> Issuers { get; } = new();
     public HashSet<string> Audiences { get; } = new();
     public string? SecretKey { get; set; }
-    public TimeSpan LiveTime { get; set; } = TimeSpan.FromMinutes(1); //= TimeSpan.FromHours(6.0d);
+    public TimeSpan LiveTime { get; set; } = TimeSpan.FromHours(6.0d);
 
     public SymmetricSecurityKey? SecurityKey => 
         SecretKey != null 

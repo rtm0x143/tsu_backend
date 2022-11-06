@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using MovieCatalogBackend.Data.MovieCatalog;
 using MovieCatalogBackend.Data.MovieCatalog.Dtos;
 using MovieCatalogBackend.Helpers;
-using MovieCatalogBackend.Services.Authentication;
+using MovieCatalogBackend.Services.Auth;
 
 namespace DatabaseFiller;
 

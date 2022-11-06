@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using MovieCatalogBackend.Data.MovieCatalog.Dtos;
 using MovieCatalogBackend.Exceptions;
 using MovieCatalogBackend.Helpers;
-using MovieCatalogBackend.Services.Authentication;
+using MovieCatalogBackend.Services.Auth;
 using MovieCatalogBackend.Services.UserServices;
 
 namespace MovieCatalogBackend.Controllers;

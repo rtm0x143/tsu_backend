@@ -1,8 +1,5 @@
-﻿using System.Data;
-using Microsoft.AspNetCore.Authorization;
-using MovieCatalogBackend.Data.MovieCatalog.Dtos;
+﻿using MovieCatalogBackend.Data.MovieCatalog.Dtos;
 using Microsoft.AspNetCore.Mvc;
-using MovieCatalogBackend.Data.MovieCatalog;
 using MovieCatalogBackend.Services.Repositories;
 
 namespace MovieCatalogBackend.Controllers;
@@ -62,47 +59,6 @@ public class MovieController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, $"Unknown exception while finding movie with id : {id}");
-            return Problem(title: "Unexpected exception occured");
-        }
-    }
-
-    [HttpPost]
-    [Authorize(Policy = "EditorPermissions")]
-    [Authorize(Policy = "TokenNotBlacked")]
-    public async Task<ActionResult> PostMovie([FromBody] MovieCreationModel details)
-    {
-        try
-        {
-            _movieRepository.Add((Movie)details);
-            await _movieRepository.FlushChangesAsync();
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Unknown exception while creating new movie({details})");
-            return Problem(title: "Unexpected exception occured");
-        }
-    }
-    
-    [HttpPut]
-    [Authorize(Policy = "EditorPermissions")]
-    [Authorize(Policy = "TokenNotBlacked")]
-    public async Task<ActionResult> PutMovie([FromBody] MovieDetailsModel model)
-    {
-        try
-        {
-            _movieRepository[model.id] = (Movie)model;
-            await _movieRepository.FlushChangesAsync();
-            return Ok();
-        }
-        catch (DBConcurrencyException e)
-        {
-            _logger.LogWarning(e, $"Can't update movie({model.id}). Seems like not found");
-            return NotFound();
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Unknown exception while updating movie({model})");
             return Problem(title: "Unexpected exception occured");
         }
     }

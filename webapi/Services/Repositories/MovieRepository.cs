@@ -31,7 +31,7 @@ public class MovieRepository : RepositoryBase, IMovieRepository
             if (value is null)
                 _context.Movie.Remove(new Movie { Id = id });
             else
-                _context.Movie.Update(value);
+                _context.Movie.Update(value with { Id = id });
         }
     }
 
@@ -51,4 +51,13 @@ public class MovieRepository : RepositoryBase, IMovieRepository
             .ToArray();
 
     public Movie[] GetFromMovies(int begin, int amount) => FetchSomeMovies(begin, amount).ToArray();
+    
+    public async ValueTask AddGenre(Guid movieId, GenreAddModel genre)
+    {
+        _context.GenreMovie.Add(new()
+        {
+            MovieId = movieId,
+            GenreId = genre.id ?? (await _context.Genre.FirstAsync(g => g.Name == genre.name)).Id
+        });
+    }
 }

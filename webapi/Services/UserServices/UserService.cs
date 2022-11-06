@@ -27,7 +27,7 @@ public class UserService : IUserService
             if (value is null)
                 _context.User.Remove(new User { Id = id }); 
             else
-                _context.User.Update(value);
+                _context.User.Update(value with { Id = id });
             _context.SaveChanges();
         }
     }

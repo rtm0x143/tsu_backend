@@ -75,7 +75,8 @@ builder.Services
 // Other services
 builder.Services
     .AddScoped<IMovieRepository, MovieRepository>()
-    .AddScoped<IUserService, UserService>();
+    .AddScoped<IUserService, UserService>()
+    .AddSingleton<IDbExceptionsHelper, OracleDbExceptionsHelper>();
 
 var app = builder.Build();
 

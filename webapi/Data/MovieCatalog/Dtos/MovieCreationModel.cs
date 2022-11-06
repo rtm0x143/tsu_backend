@@ -2,7 +2,7 @@
 
 namespace MovieCatalogBackend.Data.MovieCatalog.Dtos;
 
-public record MovieCreationModel
+public record MovieModifyModel
 {
     public string? description { get; set; }
     public string? country { get; set; }
@@ -16,7 +16,7 @@ public record MovieCreationModel
     [Required] public string name { get; set; }
     [DataType(DataType.ImageUrl)] public string? poster { get; set; }
 
-    public static explicit operator Movie(MovieCreationModel model) => new()
+    public static explicit operator Movie(MovieModifyModel model) => new()
     {
         Budget = model.budget,
         Country = model.country,

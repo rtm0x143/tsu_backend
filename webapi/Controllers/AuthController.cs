@@ -4,12 +4,14 @@ using MovieCatalogBackend.Data.Tokens;
 using Microsoft.AspNetCore.Authentication;
 using MovieCatalogBackend.Data.MovieCatalog.Dtos;
 using MovieCatalogBackend.Exceptions;
+using MovieCatalogBackend.Helpers;
 using MovieCatalogBackend.Services.Authentication;
 using MovieCatalogBackend.Services.UserServices;
 
 namespace MovieCatalogBackend.Controllers;
 
 [ApiController]
+[RequireValidModel]
 [Route("api/account")]
 public class AuthController : ControllerBase
 {
@@ -29,7 +31,8 @@ public class AuthController : ControllerBase
     {
         try
         {
-            return Ok(_tokenService.GenerateTokenFor(await _userService.Register(regModel), Request));
+            return Ok(new TokenDto(
+                _tokenService.GenerateTokenFor(await _userService.Register(regModel), Request)));
         }
         catch (BadModelException e)
         {

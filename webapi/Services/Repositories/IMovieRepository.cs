@@ -1,8 +1,5 @@
-﻿using System.Runtime.InteropServices;
-using Microsoft.EntityFrameworkCore;
-using MovieCatalogBackend.Data.MovieCatalog;
+﻿using MovieCatalogBackend.Data.MovieCatalog;
 using MovieCatalogBackend.Data.MovieCatalog.Dtos;
-using NuGet.Packaging.Signing;
 
 namespace MovieCatalogBackend.Services.Repositories;
 
@@ -37,4 +34,7 @@ public interface IMovieRepository : IRepository
     /// <param name="amount">amount of movies to select</param>
     /// <param name="selector">your custom selector to pick data from Movie</param>
     public TResult[] GetFromMovies<TResult>(int begin, int amount, Func<Movie, TResult> selector);
+
+    /// <exception cref="InvalidOperationException">When can't find <paramref name="genre"/> in database</exception>
+    public ValueTask AddGenre(Guid movieId, GenreAddModel genre);
 }

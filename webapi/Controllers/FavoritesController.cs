@@ -24,7 +24,7 @@ public class FavoritesController : ControllerBase
     [Authorize(Policy = "TokenNotBlacked")]
     public async Task<ActionResult<MoviesListModel>> Get()
     {
-        if (!User.SidAsGuid(out var id)) return Unauthorized();
+        if (!User.TryGetSidAsGuid(out var id)) return Unauthorized();
         try
         {
             return MoviesListModel.From(await _userService.GetFavoriteMovies(id));
@@ -40,7 +40,7 @@ public class FavoritesController : ControllerBase
     [HttpPost("{movieId:guid}/add")]
     public async Task<ActionResult> Add(Guid movieId)
     {
-        if (!User.SidAsGuid(out var userId)) return Unauthorized();
+        if (!User.TryGetSidAsGuid(out var userId)) return Unauthorized();
         try
         {
             await _userService.AddFavoriteMovie(userId, movieId);
@@ -62,7 +62,7 @@ public class FavoritesController : ControllerBase
     [HttpDelete("{movieId:guid}/delete")]
     public async Task<ActionResult> Delete(Guid movieId)
     {
-        if (!User.SidAsGuid(out var userId)) return Unauthorized();
+        if (!User.TryGetSidAsGuid(out var userId)) return Unauthorized();
         try
         {
             await _userService.RemoveFavoriteMovie(userId, movieId);

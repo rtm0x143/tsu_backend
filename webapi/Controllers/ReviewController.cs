@@ -74,7 +74,7 @@ public class ReviewController : ControllerBase
     }
 
     [Authorize(Policy = "TokenNotBlacked")]
-    [HttpPost("{reviewId}/edit")]
+    [HttpPut("{reviewId}/edit")]
     public async Task<ActionResult> Edit(Guid movieId, Guid reviewId, ReviewModifyModel model)
     {
         if (!User.TryGetSidAsGuid(out var userId)) return Unauthorized();

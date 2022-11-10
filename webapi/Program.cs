@@ -33,8 +33,13 @@ if (serverUrls != null)
 
 // Authentication
 builder.Services
-    .AddSingleton(authenticationOptions) 
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddSingleton(authenticationOptions)
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
     .AddJwtBearer(options => 
         options.TokenValidationParameters = authenticationOptions.CreateValidationParameters());
 

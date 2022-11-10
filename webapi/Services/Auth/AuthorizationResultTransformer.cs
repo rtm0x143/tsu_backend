@@ -9,6 +9,7 @@ namespace MovieCatalogBackend.Services.Auth;
 
 public class AuthorizationResultTransformer : IAuthorizationMiddlewareResultHandler
 {
+    private readonly AuthorizationMiddlewareResultHandler _defaultResultHandler = new(); 
     public async Task HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy,
         PolicyAuthorizationResult authorizeResult)
     {
@@ -24,9 +25,7 @@ public class AuthorizationResultTransformer : IAuthorizationMiddlewareResultHand
 
             context.Response.Headers.ContentType = MediaTypeNames.Application.Json;
             await context.Response.BodyWriter.WriteAsync(Encoding.ASCII.GetBytes(result.ToJson()));
-            return;
         }
-
-        await next.Invoke(context);
+        else await _defaultResultHandler.HandleAsync(next, context, policy, authorizeResult);
     }
 }
